@@ -1,0 +1,199 @@
+﻿body {
+    background-color: white;
+}
+    body.preload * {
+        animation-duration: 0s !important;
+        -webkit-animation-duration: 0s !important;
+        transition: background-color 0s, opacity 0s, color 0s, width 0s, height 0s, padding 0s, margin 0s !important;
+    }
+
+.container {
+    margin: 0px;
+    padding: 0px;
+}
+
+.main {
+    height: 80vh;
+}
+
+.image {
+    height: 100%;
+}
+
+.main:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%,rgba(0,0,0,0.2) 100%); /* W3C */
+}
+
+.mainImg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+.mainContent {
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px;
+    padding: 50px 70px;
+    background-color: white;
+    z-index: 20;
+    bottom: -20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 75%;
+}
+
+    .mainContent p {
+        color: grey;
+    }
+
+    .mainContent h1 {
+        font-size: 1.5rem;
+        font-weight: 500;
+    }
+
+article {
+    padding: 15% 20% 5%;
+    width: 100vw;
+}
+
+    article p {
+        text-align: justify;
+    }
+
+        article p::first-letter {
+            font-size: 2rem;
+            font-weight: 500;
+            line-height: 5px;
+        }
+
+.video {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+    height: 400px;
+    width: 80%;
+    margin: 90px auto 30px auto;
+    display: block;
+}
+
+.comments {
+    padding: 0px 20%;
+    width: 100vw;
+}
+
+.singleComment span {
+    text-transform: capitalize;
+    font-weight: 500;
+    color: #131313;
+}
+
+.singleComment p {
+    color: #616161;
+}
+
+#CommmentDescription {
+    border-radius: 20px;
+    border: none;
+    padding: 20px;
+    background: #F2F2F2;
+}
+
+.commentBtn {
+    border-radius: 10px;
+}
+
+/*typing effect*/
+/*.typed-out 
+{
+    color: #0000;
+    background: linear-gradient(-90deg,#00DFFC 5px,#0000 0) 10px 0, linear-gradient(#00DFFC 0 0) 0 0;
+    background-size: calc(var(--n)*1ch) 200%;
+    -webkit-background-clip: padding-box,text;
+    background-clip: padding-box,text;
+    background-repeat: no-repeat;
+    animation: b .7s infinite steps(1), t calc(var(--n)*.3s) steps(var(--n)) forwards;
+}
+
+@keyframes t {
+    from {
+        background-size: 0 200%
+    }
+}
+
+@keyframes b {
+    50% {
+        background-position: 0 -100%,0 0
+    }
+}*/
+
+.blur-filter {
+    filter: opacity(.2);
+    background: linear-gradient(rgba(0,0,0,.8),rgba(0,0,0,.8));
+}
+
+.Sharediv {
+    position: absolute;
+    width: 100%;
+}
+
+.sharepop {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 200;
+    align-content: center;
+    height: 440px;
+    width: 500px;
+    background-color: white;
+    box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+    border-radius: 15px;
+    padding: 1rem;
+}
+
+.copyLink input {
+    padding: 10px;
+    margin: 0 auto;
+    border-radius: 25px;
+    background: #f4f4f4;
+    border: none;
+    height: 70px;
+    color: grey;
+}
+
+.copyLink button {
+    margin: 0 auto;
+}
+
+.copyLink input :focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+.socilaMediaicon {
+    background-color: white;
+    align-items: center;
+    padding: 10px;
+    border: none;
+    border-radius: 43px;
+    margin-bottom: 20px;
+}
+
+.btnClose {
+    border: none;
+    background-color: white;
+    font-size: 20px;
+    margin-left: 76%;
+}
+
+.socilaMediaicon a i {
+    font-size: 30px;
+}

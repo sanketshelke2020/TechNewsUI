@@ -1,0 +1,143 @@
+﻿<style>
+        details {
+      margin: 0 auto ;
+     background:white;
+      margin-bottom: .5rem;
+      box-shadow: 0 .1rem 1rem -.5rem rgba(0,0,0,.4);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    summary {
+      padding: 1.4rem;
+      display: block;
+     background:white;
+      padding-left: 2.2rem;
+      position: relative;
+      cursor: pointer;
+    }
+
+    summary:before {
+      content: '';
+      border-width: .4rem;
+      border-style: solid;
+      border-color: transparent transparent transparent black;
+      position: absolute;
+      top: 1.8rem;
+      left: 1rem;
+      transform: rotate(0);
+      transform-origin: .2rem 50%;
+      transition: .25s transform ease;
+    }
+
+    /* THE MAGIC 🧙‍♀️ */
+    details[open] > summary:before {
+      transform: rotate(90deg);
+    }
+
+    details summary::-webkit-details-marker {
+      display:none;
+    }
+
+    details > ul {
+      padding-bottom: 1rem;
+      margin-bottom: 0;
+    }
+
+    .details-expanded {
+        padding: 0 2rem;
+        transition: .25s transform ease;
+    }
+
+    details {
+      background:white;
+      font-family: sans-serif;
+      color: black;
+      line-height: 1.5;
+      letter-spacing: 1px;
+      margin-bottom: 1.7%;
+      width:76%;
+
+    }
+    pre {
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+    #grad1 {
+      height: 200px;
+       /* For browsers that do not support gradients */
+      background: #a8c0ff;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #3f2b96, #a8c0ff);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #3f2b96, #a8c0ff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+      width: 100vw;
+    }
+    .container{
+        padding:0px;
+        margin:0px;
+    }
+    .heading{
+            position: absolute;
+        top: 10%;
+        margin-left: 8%;
+        color: white;
+    }
+     footer .row{
+            margin-left: 6%;
+        }
+</style>
+
+<div id="grad1">
+</div>
+<div class="heading">
+    <h1>Got A Question?</h1>
+    <h1>Get An Answer.</h1>
+</div>
+<h1 style="margin-left:33%" class="my-5">Frequently Asked Questions</h1>
+<div style="margin-left: 16%;">
+    <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <summary itemprop="name">Where can I find you? </summary>
+        <div class="details-expanded" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+
+            <ol>
+                <p>  you  can find us on any search related to technology. we will be there to server you.</p>
+            </ol>
+        </div>
+    </details>
+
+    <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <summary itemprop="name">How might I get in touch with you?</summary>
+        <div class="details-expanded" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <ol>
+                <p> For  any query you can get us in touch by clicking on contact us. you can submit your query there and we will do our best to solve your problem.</p>
+            </ol>
+        </div>
+    </details>
+    <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <summary itemprop="name">Where do your News source come from?</summary>
+        <div class="details-expanded" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <ol>
+                <p> We published news only that can be trusted and throughly reserched by our employee.We get our news source from trusted resercher and company, we make sure that all information we are publishing are true and coming fro strong reserach.</p>
+                    </ol>
+        </div>
+    </details>
+    <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <summary itemprop="name">Why I am not able to watch webinar? </summary>
+        <div class="details-expanded" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <ol>
+                <p> You can enroll for webinar by clicking on enroll button . you will be eligible to watch webinar in given time only. </p>
+            </ol>
+        </div>
+    </details>
+    <details itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+        <summary itemprop="name">How can we subscribe your site? </summary>
+        <div class="details-expanded" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+            <ol>
+                <p> You can subscribe us by going on subscribe tab and choose your plan accordingly.</p>
+            </ol>
+        </div>
+    </details>
+    
+
+</div>
+

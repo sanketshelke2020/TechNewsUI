@@ -1,0 +1,181 @@
+﻿@model IEnumerable<TechNewsUI.Models.DynamicField>
+
+@{
+    ViewData["Title"] = "GetAllDynamicField";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<style>
+    input {
+        border-radius: 12px;
+        margin-bottom: 27px
+    }
+
+    .dataTables_wrapper {
+        width: 100%;
+    }
+</style>
+
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" />
+
+
+
+
+
+<div class="mx-2 my-5 d-flex justify-content-between">
+    <h4 class="text-opacity-75">Dynamic Fields</h4>
+    <a asp-action="DynamicFieldForm" class="btn btn-dark rounded"><i class="bi bi-plus-circle"></i> Add Field</a>
+</div>
+
+<div class="d-flex justify-content-center align-items-center p-3">
+    <table data-dataTable class="table table-striped mb-4 mx-2">
+        <thead>
+            <tr class="bg-light">
+                <th hidden>
+                    @Html.DisplayNameFor(model => model.DynamicFieldId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CategoryType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FieldType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LabelText)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Options)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.MaxLength)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MinLength)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.FieldCode)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td hidden>
+                        @Html.DisplayFor(modelItem => item.DynamicFieldId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CategoryType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FieldType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LabelText)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Options)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MaxLength)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MinLength)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FieldCode)
+                    </td>
+                    <td>
+                       
+                        <div class="d-flex">
+                            <a onclick="DeleteAlert(@item.DynamicFieldId)" class="mx-2 h5"><i class="bi bi-trash"></i></a>
+                            <a asp-action="UpdateDynamicField" asp-controller="DynamicField" asp-route-id="@item.DynamicFieldId " class="mx-2 h5"><i class="bi bi-pencil-square"></i></a>
+
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="//cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="~/lib/limonte-sweetalert2/sweetalert2.min.css">
+<script src="~/lib/limonte-sweetalert2/sweetalert2.all.min.js"></script>
+<script src="~/lib/limonte-sweetalert2/sweetalert2.all.js"></script>
+<script src="~/lib/limonte-sweetalert2/sweetalert2.min.js"></script>
+
+
+@if (TempData["UpdateDynamic"] != null)
+{
+    <script>
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+
+        Toast.fire({
+            icon: 'success',
+            title: '@TempData["UpdateDynamic"]'
+        });
+        
+    </script>
+}
+<script type="text/javascript">
+    function DeleteAlert(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "GET",
+                    url: "/DynamicField/DeleteDynamicField",
+                    dataType: "JSON",
+                    data: { id: id },
+                    success: function (result) {
+                        location.reload();
+                        console.log(result);
+                    },
+                    error: function (result) {
+                        console.log(result);
+                    }
+                });
+            }
+        })
+    }
+    $("[data-dataTable]").DataTable({
+        "lengthMenu": [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+        language: {
+            paginate: {
+                next: '<i class="bi bi-caret-right-fill" style="font-size:25px;"></i>',
+                previous: '<i class="bi bi-caret-left-fill" style="font-size:25px;"></i>'
+            }
+        },
+        columnDefs: [
+            { orderable: false, targets: "no-sort" },
+            { visible: false, targets: "hide" },
+        ],
+
+    });
+</script>
+

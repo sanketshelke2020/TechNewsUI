@@ -1,0 +1,94 @@
+﻿@using TechNewsUI.Services;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TechNewsUI</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet" href="~/css/adminLayout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/TechNewsUI.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" integrity="sha384-xeJqLiuOvjUBq3iGOjvSQSIlwrpqjSHXpduPd6rQpuiM3f5/ijby8pCsnbu5S81n" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+
+
+
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar navbar-light bg-white">
+            <nav id="sidebar">
+                <div class="sidebar-header text-center pt-5 ">
+                    <img src="~/Image/Tech2.png" height="50px" />
+                </div>
+
+                <ul class="list-unstyled components">
+                    <li class="@(ViewBag.Section == "Article" ? "active" : "" )">
+                        <a asp-action="GetSectionMasterList" asp-controller="Admin" asp-route-section="Article">Article</a>
+                    </li>
+                    <li class="@(ViewBag.Section == "Podcast" ? "active" : "" )">
+                        <a asp-action="GetSectionMasterList" asp-controller="Admin" asp-route-section="Podcast">Podcast</a>
+                    </li>
+                    <li class="@(ViewBag.Section == "EventSchedule" ? "active" : "" )">
+                        <a asp-action="GetSectionMasterList" asp-controller="Admin" asp-route-section="EventSchedule">Event</a>
+                    </li>
+                    <li class="@(ViewBag.Section == "Webinar" ? "active" : "" )">
+                        <a asp-action="GetSectionMasterList" asp-controller="Admin" asp-route-section="Webinar">Webinar</a>
+                    </li>
+                    <li class="@(ViewBag.Section == "CaseStudies" ? "active" : "" )">
+                        <a asp-action="GetSectionMasterList" asp-controller="Admin" asp-route-section="CaseStudies">CaseStudies</a>
+                    </li>
+                    <li class="@(ViewBag.Section == "Magazine" ? "active" : "" )">
+                        <a asp-action="GetSectionMasterList" asp-controller="Admin" asp-route-section="Magazine">Magazine</a>
+                    </li>
+                    <li class="@(ViewBag.Section == "Youtube" ? "active" : "" )">
+                        <a asp-action="GetSectionMasterList" asp-controller="Admin" asp-route-section="Youtube">Youtube</a>
+                    </li>
+                    <li class="@(ViewBag.Section == "LiveInterview" ? "active" : "" )">
+                        <a asp-action="GetSectionMasterList" asp-controller="Admin" asp-route-section="LiveInterview">LiveInterview</a>
+                    </li>
+                    <li class="@(ViewBag.Section == "UserQuery" ? "active" : "" )">
+                        <a asp-action="GetAllUserQueries" asp-controller="Admin">User Query</a>
+                    </li>
+                    <li class="@(ViewBag.Section == "dynamic" ? "active" : "" )">
+                        <a asp-action="GetAllDynamicField" asp-controller="DynamicField">Dynamic Fields</a>
+                    </li>
+
+                </ul>
+            </nav>
+        </nav>
+        <!-- Page Content -->
+        <div id="content" class="w-100 bg-white">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="btn btn-dark rounded-circle">
+                        <i class="fas fa-align-left"></i>
+                    </button>
+                    <a class="btn btn-light border border-dark rounded-2" asp-action="Logut" asp-controller="Login"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                </div>
+
+            </nav>
+            <main role="main" class="pb-3 ">
+                @RenderBody()
+            </main>
+        </div>
+
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+
+            $('#sidebarCollapse').on('click', function() {
+                $('#sidebar').toggleClass('active');
+            });
+
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,707 @@
+﻿@model TechNewsUI.Models.UpdateSectionMasterCommandDto
+
+@{
+    ViewData["Title"] = "GetSectionMasterById";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<link rel="stylesheet" href="~/css/update.css" asp-append-version="true" />
+<script>
+    //image preview
+    function loadFile(event) {
+        var label = document.getElementById("ImagePreviewName");
+        var image = document.getElementById('ImagePreview');
+        image.src = URL.createObjectURL(event.target.files[0])
+        label.value = event.target.files[0].name;
+    };
+
+   //youtubevideo change
+   function changeYoutubeVideo(event) {
+       console.log(event);
+       var iframe = document.getElementById("videoPreview");
+       iframe.src = event;
+   }
+
+   //store file change
+   function storeFileChange(event){
+       if("@Model.CategoryType" == "Article"){
+           var image = document.getElementById('FilePreview');
+        image.src = URL.createObjectURL(event.target.files[0]);
+       }
+   }
+
+   //radio Click
+   function radioClick(value){
+       if(value=='link'){
+            var iframe = document.getElementById("YoutubeLinkInput").value;
+           document.getElementById('FilePreviewDiv').innerHTML = `
+                    <iframe id="videoPreview" class="video" width="150" height="150" src="${iframe}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+           `;
+       }
+       else{
+           var ifFile = document.getElementById('StoredFile').files.length;
+           if(ifFile!=0){
+                let image = URL.createObjectURL(document.getElementById('StoredFile').files[0]);
+                if (image != null) {
+                    document.getElementById('FilePreviewDiv').innerHTML = `
+                        <img id="FilePreview" src="${image}" height="150" width="150" />
+                   `;
+                }
+           }
+           else{
+               document.getElementById('FilePreviewDiv').innerHTML = `
+                        <img id="FilePreview" height="150px" width="150px" />
+                   `;
+           }
+          
+       }
+   }
+</script>
+<div class="row d-flex justify-content-center ">
+    <div class="col m-5">
+        <h2 my-2>Edit</h2>
+        <form asp-action="GetSectionMasterById" enctype='multipart/form-data'>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group" hidden>
+                <label asp-for="SectionMasterId" class="control-label"></label>
+                <input asp-for="SectionMasterId" class="form-control" />
+                <span asp-validation-for="SectionMasterId" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="Title" class="control-label"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label asp-for="KeyWords" class="control-label"></label>
+                        <input asp-for="KeyWords" class="form-control" />
+                        <span asp-validation-for="KeyWords" class="text-danger"></span>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="form-group" hidden>
+                <label asp-for="FileName" class="control-label"></label>
+                <input asp-for="FileName" class="form-control" />
+                <span asp-validation-for="FileName" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="form-group">
+                    <label asp-for="ShortDescription" class="control-label"></label>
+                    <input asp-for="ShortDescription" class="form-control" />
+                    <span asp-validation-for="ShortDescription" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group" hidden>
+                <label asp-for="TotalViews" class="control-label"></label>
+                <input asp-for="TotalViews" class="form-control" />
+                <span asp-validation-for="TotalViews" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" hidden>
+                <label asp-for="CategoryType" class="control-label"></label>
+                <input asp-for="CategoryType" class="form-control" id="CategoryType" />
+                <span asp-validation-for="CategoryType" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="CategoryId" class="control-label"></label>
+                <input asp-for="CategoryId" class="form-control" />
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LongDescription" class="control-label"></label>
+                <textarea asp-for="LongDescription" class="form-control" rows="4"></textarea>
+                <span asp-validation-for="LongDescription" class="text-danger"></span>
+            </div>
+            <div class="row my-3">
+
+                <div class="col-12">
+                    <div class="form-group position-relative">
+                        <label asp-for="FormImage" class="control-label"></label>
+                        <input asp-for="FileName" class="border-0 d-inline bg-white text-dark h6 w-75" disabled id="ImagePreviewName"/>
+                        <img id="ImagePreview" src="@("data:image/png;base64," + Convert.ToBase64String((byte[])Model.Image, 0))" height="110px" width="110px" />
+                        <input type="file" asp-for="FormImage" class="form-control" name="FormImage" id="Image" onchange="loadFile(event)" />
+                        <span asp-validation-for="FormImage" id="ImageError" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group change" id="ArticleCategory" hidden>
+                        <label asp-for="ArticleCategoryId" class="control-label" id="ArticleCategoryId"></label>
+                        <select id="ArticleCategoryInputId" asp-for="ArticleCategoryId" class="form-select mb-3">Select Option</select>
+                        <span asp-validation-for="ArticleCategoryId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group" hidden id="ArticleSubCategory">
+                        <label asp-for="ArticleSubCategoryId" class="control-label"></label>
+                        <select id="ArticleSubCategoryIdInput" asp-for="ArticleSubCategoryId" class="form-select mb-3"> <option value="">Article SubCategories</option></select>
+                        <span asp-validation-for="ArticleSubCategoryId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="form-group" hidden id="CountryId">
+                <label asp-for="CountryId" class="control-label"></label>
+                <select asp-for="CountryId" id="CountryIdInput" class="form-select"><option value="">--Country--</option></select>
+                <span asp-validation-for="CountryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group" hidden id="NumberOfChapter">
+                <label asp-for="NumberOfChapter" class="control-label"></label>
+                <input asp-for="NumberOfChapter" class="form-control" />
+                <span asp-validation-for="NumberOfChapter" class="text-danger"></span>
+            </div>
+
+            <div class="row my-2">
+                <div class="col">
+                    <div class="form-group" hidden id="SpeakerName">
+                        <label asp-for="SpeakerName" class="control-label"></label>
+                        <input asp-for="SpeakerName" class="form-control" />
+                        <span asp-validation-for="SpeakerName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group" hidden id="EventTopic">
+                        <label asp-for="EventTopic" class="control-label">Topic</label>
+                        <input asp-for="EventTopic" class="form-control" />
+                        <span asp-validation-for="EventTopic" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-group" hidden id="TotalSeat">
+                        <label asp-for="TotalSeat" class="control-label"></label>
+                        <input asp-for="TotalSeat" class="form-control" />
+                        <span asp-validation-for="TotalSeat" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" hidden id="EventDate">
+                <label asp-for="EventDate" class="control-label"></label>
+                <input asp-for="EventDate" class="form-control" id="EventDateInput" />
+                <span asp-validation-for="EventDate" class="text-danger" id="EventDateError"></span>
+            </div>
+
+            <div class="form-group" hidden id="NumberOfPages">
+                <label asp-for="NumberOfPages" class="control-label"></label>
+                <input asp-for="NumberOfPages" class="form-control" />
+                <span asp-validation-for="NumberOfPages" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group" hidden id="StartDate">
+                        <label asp-for="StartDate" class="control-label"></label>
+                        <input asp-for="StartDate" class="form-control" id="StartDateInput" />
+                        <span asp-validation-for="StartDate" class="text-danger" id="StartDateError"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group" hidden id="EndDate">
+                        <label asp-for="EndDate" class="control-label"></label>
+                        <input asp-for="EndDate" class="form-control" id="EndDateInput" />
+                        <span asp-validation-for="EndDate" class="text-danger" id="EndDateError"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group" hidden id="Name">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group" hidden id="Designation">
+                        <label asp-for="Designation" class="control-label"></label>
+                        <input asp-for="Designation" class="form-control" />
+                        <span asp-validation-for="Designation" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group" hidden id="ContactNumber">
+                        <label asp-for="ContactNumber" class="control-label"></label>
+                        <input asp-for="ContactNumber" class="form-control" />
+                        <span asp-validation-for="ContactNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group" hidden id="Email">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="StoredFileName" class="control-label"></label>
+                <input asp-for="StoredFileName" class="form-control" />
+                <span asp-validation-for="StoredFileName" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div id="articleRadio" class="change">
+                        <div class="form-check" id="radioImageUpload">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="image" onclick="radioClick(value)">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                Upload Image
+                            </label>
+                        </div>
+                        <div class="form-check" id="radioYoutubeLink">
+                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="link" onclick="radioClick(value)">
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Youtube link
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group" hidden id="File">
+                        <label asp-for="StoredFile" class="control-label"></label>
+                        <input asp-for="StoredFileName" class=" border-0 d-inline bg-white text-dark h6 w-75" disabled />
+                        <input type="file" asp-for="StoredFile" class="form-control" name="StoredFile" id="StoredFile" onchange="storeFileChange(event)" />
+                        <span asp-validation-for="StoredFile" class="text-danger"></span>
+                        <span class="text-danger" id="StoredFileError"></span>
+                    </div>
+                    <div class="form-group" hidden id="YoutubeVideoLink">
+                        <label asp-for="YoutubeVideoLink" class="control-label"></label>
+                        <input asp-for="YoutubeVideoLink" class="form-control" id="YoutubeLinkInput" onchange="changeYoutubeVideo(this.value)" />
+                        <span asp-validation-for="YoutubeVideoLink" class="text-danger"></span>
+                    </div>
+                    <div id="FilePreviewDiv" class="position-relative">
+                            @if (Model.File != null && Model.CategoryType == "Article")
+                            {
+                            <img id="FilePreview" height="150" width="150" src="@("data:image/png;base64," + Convert.ToBase64String((byte[])Model.File, 0))" />
+                            }
+                            else
+                            {
+                                <iframe id="videoPreview" class="video" width="150" height="150" src="@Model.YoutubeVideoLink" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            }
+
+                        </div>
+                </div>
+                @*<div class="col-4" id="FilePreviewDiv">
+                    @if (Model.File != null && Model.CategoryType == "Article")
+                    {
+                        <img id="FilePreview" src="@("data:image/png;base64," + Convert.ToBase64String((byte[])Model.File, 0))" height="110px" width="110px" />
+                    }
+                    else{
+                        <iframe id="videoPreview" class="video" width="150" height="150" src="@Model.YoutubeVideoLink" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    }
+                    
+                </div>*@
+            </div>
+
+            <div class="form-group " hidden>
+                <label asp-for="CreatedDate" class="control-label"></label>
+                <input asp-for="CreatedDate" class="form-control" />
+                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="StoredFileId" class="control-label"></label>
+                <input asp-for="StoredFileId" class="form-control" />
+                <span asp-validation-for="StoredFileId" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="WebinarHolderId" class="control-label"></label>
+                <input asp-for="WebinarHolderId" class="form-control" />
+                <span asp-validation-for="WebinarHolderId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Update" class="btn btn-dark w-100 my-4" />
+            </div>
+        </form>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+
+
+
+        if ($('#CategoryType').val() != null) {
+            var e = $('#CategoryType');
+            valChange(e);
+        }
+        var ddlArticleCategory = $('#ArticleCategoryInputId');
+        console.log(ddlArticleCategory);
+        $.ajax({
+            url: '/Admin/GetAllArticleCategories',
+            headers: { 'Access-Control-Allow-Origin': '*' },
+            type: 'POST',
+            dataType: 'json',
+
+            success: function (d) {
+                ddlArticleCategory.empty();
+                ddlArticleCategory.append($("<option></option>").val("").html("Select Article Category"));
+
+                $.each(d, function (i, articleCategory) {
+                    var id = @ViewBag.ArticleCategory;
+                    //if (@ViewBag.ArticleCategory== 0) {
+                    //    return null;
+                    //}
+
+                    if (@ViewBag.ArticleCategory== articleCategory.articleCategoryId) {
+                        ddlArticleCategory.append($("<option selected></option>").val(articleCategory.articleCategoryId).html(articleCategory.articleCategoryName));
+                        var articleCategoryId = articleCategory.articleCategoryId;
+
+                        if (!isNaN(articleCategoryId)) {
+                            var ddlArticleSubCategory = $('#ArticleSubCategoryIdInput');
+                            ddlArticleSubCategory.empty();
+                            $.ajax({
+                                url: '/Admin/GetAllArticleSubCategories',
+                                type: 'POST',
+                                dataType: 'json',
+                                data: { articleCategoryId: articleCategoryId },
+                                success: function (d) {
+                                    ddlArticleSubCategory.empty();
+                                    ddlArticleSubCategory.append($("<option></option>").val("").html("--Article SubCategories--"));
+                                    $.each(d, function (i, articleSubCategories) {
+                                        //if (@ViewBag.ArticleSubCategory== 0) return null;
+                                        if (@ViewBag.ArticleSubCategory== articleSubCategories.articleSubCategoryId) {
+                                            ddlArticleSubCategory.append($("<option selected></option>")
+                                                .val(articleSubCategories.articleSubCategoryId)
+                                                .html(articleSubCategories.articleSubCategoryName)
+                                            );
+                                        }
+                                        else {
+                                            ddlArticleSubCategory.append(
+                                                $("<option></option>")
+                                                    .val(articleSubCategories.articleSubCategoryId)
+                                                    .html(articleSubCategories.articleSubCategoryName)
+                                            );
+                                        }
+
+                                    });
+
+                                },
+                                error: function () {
+                                    alert('Error!');
+                                    console.log(f);
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        ddlArticleCategory.append($("<option></option>").val(articleCategory.articleCategoryId).html(articleCategory.articleCategoryName));
+                    }
+                });
+            },
+            error: function (e) {
+                console.log("Error")
+                console.log(e);
+            }
+        });
+        //Image Validation
+        $("#Image").change(function () {
+            var imageExt = ["jpg", "JPG", "png", "PNG", "JPEG", "jpeg"];
+            var fileType = document.getElementById("Image").value;
+            var ext = fileType.substring(fileType.lastIndexOf(".") + 1, fileType.length);
+
+            if (fileType != "" || fileType != Undefined) {
+                if ($.inArray(ext, imageExt) == -1) {
+                    $("#Image").val("");
+                    $("#ImageError").text("Only png, jpg and jpeg Files are allowed.");
+                }
+                else {
+                    $("#ImageError").text("");
+                }
+            }
+            else {
+                $("#ImageError").text("");
+            }
+        })
+        //File Validation
+        function checkFileType(...extensions) {
+            var filType = document.getElementById("StoredFile").value;
+            var ext = filType.substring(filType.lastIndexOf(".") + 1, filType.length);
+
+            if (filType != null) {
+                if ($.inArray(ext, extensions) == -1) {
+                    document.getElementById("StoredFileError").textContent = "Only " + extensions.join(", ") + " Files are allowed.";
+                    $("#StoredFile").val("");
+                }
+                else {
+                    $("#StoredFileError").text("");
+                }
+            }
+            else {
+                $("#StoredFileError").text("");
+            }
+        }
+
+
+        function checkEndDate() {
+            var dateString = document.getElementById('EndDateInput').value;
+            var myDate = new Date(dateString);
+            var dateString1 = document.getElementById('StartDateInput').value;
+            var startDate = new Date(dateString1);
+            if (myDate == null) {
+
+            }
+            else if (myDate < startDate) {
+                $('#EndDateError').text("End Date should be greater than Start date");
+                $('#EndDateInput').val("");
+            }
+            else {
+                $('#EndDateError').text("");
+            }
+        }
+        //Evnet Date
+        $("#EventDateInput").change(function () {
+            var dateString = document.getElementById('EventDateInput').value;
+            var myDate = new Date(dateString);
+            var today = new Date();
+            if (myDate < today) {
+                $('#EventDateError').text("Event Date and Time should be greater than Current date and time");
+                $('#EventDateInput').val("");
+            }
+            else {
+                $('#EventDateError').text("");
+            }
+        });
+        //datetime greater than today
+        $("#StartDateInput").change(function () {
+            var dateString = document.getElementById('StartDateInput').value;
+            var myDate = new Date(dateString);
+            var today = new Date();
+            checkEndDate();
+            if (myDate < today) {
+                $('#StartDateError').text("Start Date should be greater than today date");
+                $('#StartDateInput').val("");
+            }
+            else {
+                $('#StartDateError').text("");
+            }
+        });
+        $("#EndDateInput").change(function () {
+            checkEndDate();
+        });
+
+        $('#CategoryType').change(function () {
+            console.log("helle");
+            var e = $(this);
+            valChange(e);
+        });
+
+        function valChange(e) {
+            $(".change").attr("hidden", true);
+            if (e.val() === "Youtube") {
+                $('#YoutubeVideoLink').removeAttr('hidden');
+            }
+            else if (e.val() == "CaseStudies") {
+                $('#NumberOfChapter').removeAttr('hidden');
+                $('#File').removeAttr('hidden');
+                $("#StoredFile").change(function () {
+                    checkFileType("pdf");
+                })
+
+            }
+            else if (e.val() == "Article") {
+                $('#ArticleCategory').removeAttr('hidden');
+                $('#ArticleSubCategory').removeAttr('hidden');
+                $('#CountryId').removeAttr('hidden');
+                $('#YoutubeVideoLink').removeAttr('hidden');
+                $('#File').removeAttr('hidden');
+                $("#StoredFile").change(function () {
+                    checkFileType("jpg", "jpeg", "png");
+                })
+                $('#articleRadio').removeAttr('hidden');
+                radioHideShowFileds();
+                $('input[name="flexRadioDefault"]').change(function () {
+                    radioHideShowFileds();
+                });
+
+                //assing checked to radio
+                let link = $("#YoutubeLinkInput").val();
+                if (link == "" || link == null || link == undefined) {
+                    $("#flexRadioDefault1").attr("checked", "checked");
+                }
+                else {
+                    $("#flexRadioDefault2").attr("checked", "checked");
+                }
+            }
+            else if (e.val() == "Webinar") {
+                $('#StartDate').removeAttr('hidden');
+                $('#EndDate').removeAttr('hidden');
+                $('#SpeakerName').removeAttr('hidden');
+                $('#YoutubeVideoLink').removeAttr('hidden');
+                $('#Name').removeAttr('hidden');
+                $('#Designation').removeAttr('hidden');
+                $('#ContactNumber').removeAttr('hidden');
+                $('#Email').removeAttr('hidden');
+                $('#TotalSeat').removeAttr('hidden');
+                //$('#File').removeAttr('hidden');
+                $('#EventTopic').removeAttr('hidden');
+
+                //$("#StoredFile").change(function () {
+                //    checkFileType("mp4");
+                //})
+            }
+            else if (e.val() == "Podcast") {
+                $('#SpeakerName').removeAttr('hidden');
+            }
+            else if (e.val() == "EventSchedule") {
+                $('#SpeakerName').removeAttr('hidden');
+                $('#EventTopic').removeAttr('hidden');
+                $('#EventDate').removeAttr('hidden');
+                //$('#File').removeAttr('hidden');
+                $('#YoutubeVideoLink').removeAttr('hidden');
+                //$("#StoredFile").change(function () {
+                //    checkFileType("mp4");
+                //})
+            }
+            else if (e.val() == "Magazine") {
+                $('#NumberOfPages').removeAttr('hidden');
+                $('#File').removeAttr('hidden');
+                $("#StoredFile").change(function () {
+                    checkFileType("pdf");
+                })
+            }
+            else if (e.val() == "LiveInterview") {
+                $('#YoutubeVideoLink').removeAttr('hidden');
+            }
+        }
+        if ($('#CategoryType').val() != null) {
+            var e = $('#CategoryType');
+            valChange(e);
+        }
+
+
+        //Article
+
+        $("#ArticleCategoryInputId").change(function () {
+            var articleCategoryId = parseInt($(this).val());
+
+            if (!isNaN(articleCategoryId)) {
+                var ddlArticleSubCategory = $('#ArticleSubCategoryIdInput');
+                ddlArticleSubCategory.empty();
+                $.ajax({
+                    url: '/Admin/GetAllArticleSubCategories',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { articleCategoryId: articleCategoryId },
+                    success: function (d) {
+                        ddlArticleSubCategory.empty();
+                        ddlArticleSubCategory.append($("<option></option>").val("").html("--Article SubCategories--"));
+                        $.each(d, function (i, articleSubCategories) {
+                            if (@ViewBag.ArticleSubCategory== articleSubCategories.articleSubCategoryId) {
+                                ddlArticleSubCategory.append($("<option selected></option>")
+                                    .val(articleSubCategories.articleSubCategoryId)
+                                    .html(articleSubCategories.articleSubCategoryName)
+                                );
+                            }
+                            else {
+                                ddlArticleSubCategory.append(
+                                    $("<option></option>")
+                                        .val(articleSubCategories.articleSubCategoryId)
+                                        .html(articleSubCategories.articleSubCategoryName)
+                                );
+                            }
+
+                        });
+
+                    },
+                    error: function () {
+                        alert('Error!');
+                        console.log(f);
+                    }
+                });
+            }
+
+        });
+        var ddlCountry = $('#CountryIdInput');
+        $.ajax({
+            url: '/Admin/GetAllCountries',
+            headers: { 'Access-Control-Allow-Origin': '*' },
+            type: 'POST',
+            dataType: 'json',
+            //data: {countryId: countryId },
+            success: function (d) {
+                ddlCountry.empty();
+                ddlCountry.append($("<option></option>").val("").html("--Country--"));
+
+                $.each(d, function (i, country) {
+                    if (@ViewBag.CountryId== country.countryId) {
+                        ddlCountry.append($("<option selected></option>").val(country.countryId).html(country.countryName));
+                    }
+                    else {
+                        ddlCountry.append($("<option></option>").val(country.countryId).html(country.countryName));
+                    }
+                });
+            },
+            error: function (e) {
+                console.log("Error")
+                console.log(e);
+            }
+        });
+
+
+        function radioHideShowFileds() {
+            if ($('#flexRadioDefault1').is(':checked')) {
+                $("#YoutubeVideoLink").css('display', 'none');
+                $("#File").css('display', 'block');
+            }
+            else {
+                $("#YoutubeVideoLink").css('display', 'block');
+                $("#File").css('display', 'none');
+            }
+        }
+    });
+
+</script>
+<link rel="stylesheet" href="~/lib/limonte-sweetalert2/sweetalert2.min.css">
+<script src="~/lib/limonte-sweetalert2/sweetalert2.all.min.js"></script>
+<script src="~/lib/limonte-sweetalert2/sweetalert2.all.js"></script>
+<script src="~/lib/limonte-sweetalert2/sweetalert2.min.js"></script>
+
+@if (TempData["UpdateSuccess"] != null)
+{
+
+
+        <script>
+
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            })
+
+            Toast.fire({
+                icon: 'success',
+                title: '@TempData["UpdateSuccess"]'
+            })
+        </script>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

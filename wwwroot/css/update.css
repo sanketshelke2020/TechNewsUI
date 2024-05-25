@@ -1,0 +1,88 @@
+﻿body {
+}
+
+.form-control {
+    border: none;
+    background-color: #FAFAFA;
+    color: #222222;
+    border-radius: 0px;
+}
+
+.control-label {
+    margin: 5px auto;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+    .control-label:after {
+        content: " *";
+        color: red;
+    }
+
+#ImagePreviewName {
+    position: relative;
+    z-index: 0;
+}
+    #ImagePreviewName:hover {
+        background-color: transparent;
+        z-index: 50;
+    }
+        #ImagePreviewName:hover + #ImagePreview {
+            visibility: visible;
+            top: -110px;
+            left: 50px;
+            z-index: 51;
+        }
+        #ImagePreview {
+            /* float: right;
+    border-radius: 5px;*/
+
+            position: absolute;
+            background-color: lightyellow;
+            padding: 5px;
+            /*left: -1000px;*/
+            border: 1px dashed gray;
+            visibility: hidden;
+            color: black;
+            text-decoration: none;
+        }
+    
+.video {
+    border-radius: 5px;
+    float: right;
+}
+
+#FilePreview {
+    position: absolute;
+    padding: 5px;
+    /*left: -1000px;*/
+    visibility: hidden;
+    color: black;
+    text-decoration: none;
+}
+#File:hover ~ #FilePreviewDiv > #FilePreview {
+    visibility: visible;
+    top: -200px;
+    left: 108px;
+}
+#videoPreview {
+    position: absolute;
+    padding: 5px;
+    /*left: -1000px;*/
+    visibility: hidden;
+    color: black;
+    text-decoration: none;
+}
+#YoutubeVideoLink:hover ~ #FilePreviewDiv > #videoPreview {
+    visibility: visible;
+    top: -200px;
+    left: 108px;
+}
+img {
+    display: none;
+}
+
+
+    img[src] {
+        display: block;
+    }

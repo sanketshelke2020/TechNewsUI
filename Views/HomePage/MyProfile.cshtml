@@ -1,0 +1,312 @@
+﻿@model TechNewsUI.Models.UpdateUser
+
+
+<link rel="stylesheet" href="~/css/MyProfile.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/lib/limonte-sweetalert2/sweetalert2.min.css">
+<script src="~/lib/limonte-sweetalert2/sweetalert2.all.min.js"></script>
+<script src="~/lib/limonte-sweetalert2/sweetalert2.all.js"></script>
+<script src="~/lib/limonte-sweetalert2/sweetalert2.min.js"></script>
+@if(TempData["updateUser"] != null)
+{
+      <script>
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+
+        Toast.fire({
+            icon: 'success',
+            title: '@TempData["updateUser"]'
+        })
+    </script>
+}
+
+
+<div>
+<div class="backImg vw-100 ">
+    <img src="~/Image/pexels-andrea-piacquadio-3772531.jpg"  class="w-100"/>
+</div>
+<div class="Introname">
+  <h1> Hello @Model.FirstName @Model.LastName .</h1>
+  <p class="text-secondary"> Update Your Profile.</p>
+</div>
+<div class="profileIcon">
+     <img src="~/Image/profile3.jpg"/>
+</div>
+</div>
+
+<div class="row d-flex justify-content-center align-items-center maindiv " style="margin-top:13%;margin-left: 20%;">
+    <div class="col-md-6">
+     
+        <form asp-action="MyProfile" class="formContainer">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" hidden>
+                <label asp-for="UserId" class="control-label"></label>
+                 <span class="required">*</span>
+                <input asp-for="UserId" class="form-control inputvalue" />
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                 <span class="required">*</span>
+                <input asp-for="FirstName" class="form-control inputvalue"/>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                 <span class="required">*</span>
+                <input asp-for="LastName" class="form-control inputvalue" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CompanyName" class="control-label"></label>
+                 <span class="required">*</span>
+                <input asp-for="CompanyName" class="form-control inputvalue" />
+                <span asp-validation-for="CompanyName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                 <span class="required">*</span>
+                <input asp-for="PhoneNumber" class="form-control inputvalue" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="Email" class="control-label"></label>
+                 <span class="required">*</span>
+                <input asp-for="Email" class="form-control inputvalue" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Nationality" class="control-label"></label>
+                 <span class="required">*</span>
+                <input asp-for="Nationality" class="form-control inputvalue" />
+                <span asp-validation-for="Nationality" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CountryId" class="control-label"></label>
+                <span class="required">*</span>
+                <select style="width:400;" asp-for="CountryId" class="form-select" asp-items="ViewBag.CountryId" required><option value="">--Country--</option></select>
+                <span asp-validation-for="CountryId" class="text-danger"></span>
+
+            </div>
+
+            <div class="form-group">
+                <label asp-for="StateId" class="control-label"></label>
+                <span class="required">*</span>
+                <select style="width:400;" asp-for="StateId" class="form-select" asp-items="ViewBag.StateId" required><option value="">--State--</option></select>
+                <span asp-validation-for="StateId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CityId" class="control-label"></label>
+                <span class="required">*</span>
+                <select style="width:400;" asp-for="CityId" class="form-select" asp-items="ViewBag.CityId" required><option value="">--City--</option></select>
+                <span asp-validation-for="CityId" class="text-danger"></span>
+
+            </div>
+            <div class="form-group" hidden>
+                <label asp-for="UserRoleId" class="control-label"></label>
+                <input asp-for="UserRoleId" class="form-control" />
+                <span asp-validation-for="UserRoleId" class="text-danger"></span>
+            </div>
+            
+                <input type="submit" value="Update" class="btn btn-dark submitbtn" />
+                
+        </form>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+<script>
+    console.log("script is working");
+    $(document).ready(function() {
+
+
+
+        var ddlCountry = $('#CountryId');
+        $.ajax({
+            url: '/Register/GetAllCountries',
+            headers: { 'Access-Control-Allow-Origin': '*' },
+            type: 'POST',
+            dataType: 'json',
+            //data: { countryId: countryId },
+            success: function(d) {
+                ddlCountry.empty();
+                ddlCountry.append($("<option></option>").val("").html("--Country--"));
+
+
+                $.each(d, function(i, country) {
+                    var id = @ViewBag.CountryIdselected;
+                    console.log(id);
+                    if (@ViewBag.CountryIdselected == country.countryId) {
+                        console.log(country.countryName);
+                        ddlCountry.append($("<option selected></option>").val(country.countryId).html(country.countryName));
+                        var CountryId = country.countryId;
+                        if (!isNaN(CountryId)) {
+                            console.log("inside state")
+                            var ddlState = $('#StateId');
+                            ddlState.empty();
+                            $.ajax({
+                                url: '/Register/GetAllStates/',
+                                type: 'POST',
+                                dataType: 'json',
+                                data: { countryId: CountryId },
+                                success: function(d) {
+                                    ddlState.empty();
+                                    ddlState.append($("<option></option>").val("").html("--State--"));
+                                    $.each(d, function(i, states) {
+                                        console.log(@ViewBag.StateIdselected)
+                                        if (@ViewBag.StateIdselected == states.stateId) {
+                                            ddlState.append($("<option selected></option>")
+                                                .val(states.stateId)
+                                                .html(states.stateName)
+                                                
+                                            );
+                                            var StateId = states.stateId;
+                                            CitySelectes(StateId);
+                                        }
+                                        else {
+                                            ddlState.append(
+                                                $("<option></option>")
+                                                    .val(states.stateId)
+                                                    .html(states.stateName)
+                                            );
+                                        }
+
+                                    });
+
+                                },
+                                error: function() {
+                                    alert('Error!');
+                                    console.log(f);
+                                }
+                            });
+                        }
+
+                    }
+                    else {
+                        ddlCountry.append($("<option></option>").val(country.countryId).html(country.countryName));
+                    }
+
+
+                });
+            },
+            error: function(e) {
+                console.log("Error")
+                console.log(e);
+            }
+        });
+
+        $("#CountryId").change(function() {
+            var countryId = parseInt($(this).val());
+
+            if (!isNaN(countryId)) {
+                var ddlState = $('#StateId');
+                ddlState.empty();
+                var ddlCity = $('#CityId');
+                ddlCity.empty();
+                $.ajax({
+                    url: '/Register/GetAllStates/',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { countryId: countryId },
+                    success: function(d) {
+                        ddlState.empty(); // empty the list for new selecting state
+                        ddlState.append($("<option></option>").val("").html("--State--"));
+                        $.each(d, function(i, states) {
+                            ddlState.append($("<option></option>").val(states.stateId).html(states.stateName));
+                        });
+                    },
+                    error: function() {
+                        alert('Error!');
+                    }
+                });
+            }
+            //
+
+        });
+        $("#StateId").change(function() {
+            var stateId = parseInt($(this).val());
+
+            if (!isNaN(stateId)) {
+                var ddlCity = $('#CityId');
+                ddlCity.empty();
+                $.ajax({
+                    url: '/Register/GetAllCities/',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { stateId: stateId },
+                    success: function(d) {
+                        ddlCity.empty(); // empty the list for new selecting city
+                        ddlCity.append($("<option></option>").val("").html("--City--"));
+
+                        $.each(d, function(i, cities) {
+                            ddlCity.append($("<option></option>").val(cities.cityId).html(cities.cityName));
+                        });
+                    },
+                    error: function() {
+                        alert('Error!');
+                    }
+                });
+            }
+
+        });
+        function CitySelectes(city) {
+            console.log("Insite CitySelectes ")
+            if (!isNaN(city)) {
+               var ddlCity = $('#CityId');
+               ddlCity.empty();
+                $.ajax({
+                    url: '/Register/GetAllCities/',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { stateId: city },
+                    success: function(d) {
+                        ddlCity.empty();
+                        ddlCity.append($("<option></option>").val("").html("--City--"));
+                        $.each(d, function(i, cities) {
+                            //if (@ViewBag.ArticleSubCategory== 0) return null;
+                            if (@ViewBag.CityIdselected== cities.cityId) 
+                            {
+                                ddlCity.append($("<option selected></option>")
+                                    .val(cities.cityId)
+                                    .html(cities.cityName)
+                                );
+                            }
+                            else 
+                            {
+                                ddlCity.append(
+                                    $("<option></option>")
+                                        .val(cities.cityId)
+                                        .html(cities.cityName)
+                                );
+                            }
+
+                        });
+
+                    },
+                    error: function() 
+                    {
+                        alert('Error!');
+                        console.log(f);
+                    }
+                });
+            }
+
+        }
+    });
+
+</script>
+

@@ -1,0 +1,1080 @@
+﻿@using Microsoft.AspNetCore.Http
+@model TechNewsUI.Models.CaseStudiesDetail
+
+@{
+    ViewData["Title"] = "GetMagazineById";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+
+<style>
+
+
+    .title {
+        text-transform: capitalize;
+        font-size: 2.3rem;
+        font-family: 'Raleway', sans-serif;
+    }
+
+    .titlediv {
+        margin-top: 6%;
+        margin-right: 11%;
+        margin-left: 14%;
+        text-align: center;
+    }
+
+    .shortdis {
+        margin-right: 19%;
+        margin-left: 17%;
+        margin-bottom: 4%;
+        font-size: 18px;
+        text-transform: capitalize;
+        margin-top: 2%;
+        text-align: center;
+    }
+
+    .longdis {
+        margin-left: 7%;
+        margin-top: 5%;
+        margin-right: 5%;
+        font-size: 18px;
+        text-transform: capitalize;
+    }
+
+    #CommmentDescription {
+        border-radius: 20px;
+        border: none;
+        padding: 20px;
+        background: white;
+    }
+
+    .comments {
+        padding: 0px 20%;
+        width: 100vw;
+        margin-left: -12%;
+    }
+
+    .singleComment span {
+        text-transform: capitalize;
+        font-weight: 500;
+        color: #131313;
+    }
+
+    .singleComment p {
+        color: #616161;
+    }
+
+    .blur-filter {
+        filter: opacity(.2);
+        background: linear-gradient(rgba(0,0,0,.8),rgba(0,0,0,.8));
+    }
+
+    .Sharediv {
+        position: absolute;
+        width: 100%;
+    }
+
+    .sharepop {
+        display: none;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 200;
+        align-content: center;
+        height: 440px;
+        width: 500px;
+        background-color: white;
+        box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+        border-radius: 15px;
+        padding: 1rem;
+    }
+
+    .copyLink input {
+        padding: 10px;
+        margin: 0 auto;
+        border-radius: 25px;
+        background: #f4f4f4;
+        border: none;
+        height: 70px;
+        color: grey;
+    }
+
+    .copyLink button {
+        margin: 0 auto;
+    }
+
+    .copyLink input :focus {
+        background-color: #ddd;
+        outline: none;
+    }
+
+    .socilaMediaicon {
+        background-color: white;
+        align-items: center;
+        padding: 10px;
+        border: none;
+        border-radius: 43px;
+        margin-bottom: 20px;
+    }
+
+    .btnClose {
+        border: none;
+        background-color: white;
+        font-size: 20px;
+        margin-left: 76%;
+    }
+
+    .socilaMediaicon a i {
+        font-size: 30px;
+    }
+
+    .info {
+        margin-top: 2%;
+        margin-left: 75%;
+        font-size: 18px;
+    }
+
+    .calender {
+        margin-right: 13%
+    }
+</style>
+<div id="Detailedpage">
+    <div>
+        <div>
+            <div class="">
+                <div class="titlediv">
+                    <h1 class="d-inline title">@Model.Title.ToString()</h1>
+                </div>
+                <div class="shortdis">
+                    <p class="text-secondary">@Model.ShortDescription</p>
+                </div>
+
+
+            </div>
+            <div class="">
+                <img src="@("data:image/png;base64," + Convert.ToBase64String((byte[])Model.Image, 0))" style="width: 96%;height:600px;margin-left: 2%;" />
+            </div>
+            <div class="info  d-flex ">
+                <div class="calender">
+                    <span> <i class="bi bi-book-fill"></i> @Model.NumberOfChapter </span>
+                </div>
+                <div>
+                    <span> <i class="bi bi-eye-fill p-1"></i>@Model.TotalViews </span>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="longdis">
+            <p>@Model.LongDescription</p>
+        </div>
+    </div>
+    <div>
+        @foreach (var item in Model.StoredFiles)
+        {
+
+
+            <div style="margin-left: 14%; margin-top:6%;">
+                @if (Context.Session.GetString("Token") != null)
+                {
+                    <iframe src="@("data:application/pdf;base64," + Convert.ToBase64String((byte[])item.StoredFilePath,0))" type="application/pdf" width="800px" height="750px"></iframe>
+                }
+                else
+                {
+                    <iframe src="@("data:application/pdf;base64," + Convert.ToBase64String((byte[])item.StoredFilePath,0))#toolbar=0" type="application/pdf" width="800px" height="750px"></iframe>
+
+                }
+            </div>
+
+
+            break;
+        }
+    </div>
+    <div class="comments">
+        @if (Model.comments.Count() == 0)
+        {
+            <h3 class="my-5 text-muted ">  Comments</h3>
+        }
+        else
+        {
+            <h3 class="my-5 text-muted"> @Model.comments.Count() Comments</h3>
+        }
+
+        <button class="btn btn-outline-secondary d-flex" onclick="openForm()" style="margin-left: 95%;margin-top: -9%;"> <i class="bi bi-share mx-2"></i>Share</button>
+        @foreach (var comment in @Model.comments)
+        {
+            <div class="singleComment mt-4">
+                <span>@comment.Email</span>
+                <p class="my-1">@comment.CommentDescription</p>
+            </div>
+            <hr />
+        }
+        <form asp-action="AddComment" asp-controller="CaseStudies" asp-route-id=@Model.SectionMasterId>
+            <div class="container md-form p-4">
+                <i class="bi bi-pencil-fill" prefix"></i>
+                <div class="d-flex justify-content-between align-items-center">
+                    @if (Context.Session.GetString("Token") != null)
+                    {
+                        <textarea id="CommmentDescription" name="commentdis" class="md-textarea form-control" rows="4" required></textarea>
+                    }
+                    else
+                    {
+                        <textarea id="CommmentDescription" name="commentdis" class="md-textarea form-control" rows="4" required disabled placeholder="Please login first to add comment"></textarea>
+                    }
+
+                    <span class="text-danger"></span>
+
+                </div>
+                @if (Context.Session.GetString("Token") != null)
+                {
+                    <input type="submit" value="Comment" class="btn btn-dark commentBtn mt-3" />
+
+                }
+                else
+                {
+                    <input type="submit" value="Comment" class="btn btn-dark commentBtn mt-3" disabled />
+                }
+
+            </div>
+        </form>
+    </div>
+</div>
+
+@{
+    var Request = Context.Request;
+    var location = new Uri($"{Request.Scheme}://{Request.Host}{Request.Path}{Request.QueryString}");
+
+    var url = location.AbsoluteUri;
+
+}
+<div class="Sharediv">
+    <div class="sharepop" id="popform">
+        <div class="btnClose">
+            <button class="btnClose" onclick="closeForm()"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="heading mb-5 text-center">Share a Post</div>
+        <hr />
+        <div class="socilaMediaicon d-flex justify-content-around  ">
+            <a href="http://twitter.com/share?url=@url" class="btn btn-outline-primary btn-floating m-1 rounded-circle " title="share on twitter"><i class="bi bi-twitter"></i></a>
+            <a href="whatsapp://send?url=@url" data-action="share/whatsapp/share" class="btn btn-outline-success btn-floating m-1 rounded-circle" title="share on whatsapp" target="_blank"> <i class="bi bi-whatsapp"></i></a>
+            <a href="http://www.facebook.com/sharer.php?url=@url" class="btn btn-outline-info btn-floating m-1 rounded-circle" title="share on facebook"><i class="bi bi-facebook"></i></a>
+        </div>
+        <div class="copyLink text-center">
+            <input value="@url" id="Url" class="w-100 my-3" /><br />
+
+            <button class="btn btn-lg btn-dark rounded-pill" onclick="CopyText()">Copy</button>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    function closeForm() {
+        document.getElementById("popform").style.display = "none";
+        var element = document.getElementById("Detailedpage");
+        element.classList.remove("blur-filter");
+        var element = document.getElementById("Footerfixed");
+        element.classList.remove("blur-filter");
+
+    }
+    function openForm() {
+        document.getElementById("popform").style.display = "block";
+        var element = document.getElementById("Detailedpage");
+        element.classList.add("blur-filter");
+        var element = document.getElementById("Footerfixed");
+        element.classList.add("blur-filter");
+
+    }
+    function CopyText() {
+        // Get the text field
+        var copyText = document.getElementById("Url");
+
+        // Select the text field
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText.value);
+
+        // Alert the copied text
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

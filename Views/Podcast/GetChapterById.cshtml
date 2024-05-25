@@ -1,0 +1,34 @@
+﻿@model TechNewsUI.Models.PodcastChapter
+
+@{
+    ViewData["Title"] = "GetChapterById";
+}
+
+
+        <div class="container d-flex justify-content-center align-items-center vw-100  p-5" >
+        <div class="row" style="border: 2px solid black;padding:35px;" >
+          <div class="col" >
+            <div class="chapterTitle">
+            <h3>@Model.ChapterTitle</h3>
+            </div>
+            <div class="chapterDis">
+               @Model.ChapterDescription  </div>
+          </div>
+          <div class="col">
+              @*<img src="@("data:image/png;base64," + Convert.ToBase64String((byte[])item.Image, 0))"  />*@
+              @if(Context.Session.GetString("Token") != null)
+            {
+              <audio controls>
+             <source  src="@("data:audio/mp3;base64," + Convert.ToBase64String((byte[])Model.Audio, 0))" >
+                </audio>
+            }
+            else
+            {
+                <audio controls  controlsList="nodownload">
+             <source  src="@("data:audio/mp3;base64," + Convert.ToBase64String((byte[])Model.Audio, 0))" >
+                </audio> 
+            }
+            <img src="~/Image/ClosedMisguidedCormorant-size_restricted.gif" alt="wave" width="300px" height="300px">
+          </div>
+        </div>
+    </div>

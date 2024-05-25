@@ -1,0 +1,16 @@
+﻿
+.card {
+    margin: 0 auto;
+    border: none;
+    border-radius: 20px;
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+}
+
+.card-img, .card-img-top {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.card .views {
+    float: right;
+}

@@ -1,0 +1,255 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model TechNewsUI.Models.UserQuery
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+<style>
+    .required {
+        color: red;
+    }
+    .animate {
+    animation: fadeIn 5s;
+    opacity: 1;
+}
+    .animate:hover{
+        font-size:20px;
+    }
+
+    a.tooltiplink {
+        position: relative;
+    }
+
+        a.tooltiplink:hover::after {
+            content: attr(data-title);
+            background-color: #8fbc8f;
+            color: #fff;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            line-height: 14px;
+            display: block;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            z-index: 1;
+        }
+            .form-control, textarea {
+        width: 100%;
+        border: 1px solid #bdbdbd;
+        border-radius: 5px;
+    }
+
+
+   
+
+</style>
+
+<link href="~/css/addquery.css" rel="stylesheet" />
+<div class="contain">
+
+    <div class="wrapper">
+
+        <div class="form">
+            <h4>GET IN TOUCH</h4>
+            <h2 class="form-headline">Send us a message</h2>
+            <form class="needs-validation" id="submit-form" asp-action="AddUserQuery" novalidate>
+                <p>
+@*                    <input id="name" class="form-input" type="text" placeholder="Your Name*">
+                    *@                       <input asp-for="FullName" id="name" class="form-control" type="text" data-title="Download Wonder Plugins" placeholder="Full Name*" required>
+                        <small class="name-error"></small>
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+
+                </p>
+                <p>
+                    <input asp-for="JobDesignation" class="form-control" type="text" placeholder="Job Designation*" required>
+                    <small class="name-error"></small>
+                    <span asp-validation-for="JobDesignation" class="text-danger"></span>
+                </p>
+                <p>
+                    <input asp-for="CompanyName" class="form-control" type="text" placeholder="Company Name*" required>
+                    <small class="name-error"></small>
+                    <span asp-validation-for="CompanyName" class="text-danger"></span>
+
+                </p>
+                <p>
+
+                    <select asp-for="CountryId" id="CountryId" class="form-select" required> <option value="">Select Country</option></select>
+                    <span asp-validation-for="CountryId" class="text-danger"></span>
+
+                </p>
+                <p>
+                    <input asp-for="EmailAddress" id="email" class="form-control" type="email" placeholder="Your Email id*" required>
+                    <small class="name-error"></small>
+                    <span asp-validation-for="EmailAddress" class="text-danger"></span>
+
+                </p>
+                <p>
+                    <input asp-for="MobileNumber" type="text" class="form-control" placeholder="Mobile Number*" required onkeypress="return isPhoneNumber(event)" />
+                    <small class="name-error"></small>
+
+                    <span asp-validation-for="MobileNumber" class="text-danger"></span>
+                </p>
+                <p>
+                    <input asp-for="Subject" class="form-control" type="text" placeholder="Reason for contact*" required>
+                    <small class="name-error"></small>
+                    <span asp-validation-for="Subject" class="text-danger"></span>
+                </p>
+               
+                
+
+                
+                <p>
+                    <input asp-for="CategoryType" class="form-control" type="text" placeholder="Category Type*" required>
+                    <small class="name-error"></small>
+                    <span asp-validation-for="CategoryType" class="text-danger"></span>
+
+                </p>
+               
+                <p class="full-width">
+                    <textarea asp-for="Description" minlength="20" id="message" cols="30" rows="7" class="form-control" placeholder="Message Desciption*" required></textarea>
+                    <small></small>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+
+                </p>
+                
+                <div class="full-width">
+                    <input type="submit" class="btn btn-dark" value="Submit">
+@*                    <button class="btn btn-dark" onclick="reset()">Reset</button>
+*@                    <button class="btn btn-dark" <input type="reset" value="Reset" onclick="reset()">Reset</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="contacts contact-wrapper">
+
+            <ul>
+                <li>
+                    We've driven online revenues of over <span class="highlight-text-grey">
+                        $2
+                        billion
+                    </span> for our clients. Ready to know
+                    how we can help you?
+                </li>
+                <span class="hightlight-contact-info">
+                <li class="email-info"><i class="fa fa-envelope" aria-hidden="true"></i> technews@gmail.com</li>
+                <li><i class="fa fa-phone" aria-hidden="true"></i> <span >022 4050 0600</span></li>
+                </span>
+                <span>
+                <li>Unit No 501, Sigma IT Park, Plot No R-203,204, Midc TTC Industrial Area. Rabale, Navi Mumbai, Maharashtra 400701</li>
+                </span>
+            </ul>
+        </div>
+    </div>
+</div>
+<script src="~/js/adduserquery.js"></script>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+
+<script>
+
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+
+    $(document).ready(function() {
+        var ddlCountry = $('#CountryId');
+        $.ajax({
+            url: '/Register/GetAllCountries',
+            headers: { 'Access-Control-Allow-Origin': '*' },
+            type: 'POST',
+            dataType: 'json',
+            //data: { countryId: countryId },
+            success: function(d) {
+                ddlCountry.empty();
+                ddlCountry.append($("<option></option>").val("").html("Choose Country"));
+
+                $.each(d, function(i, country) {
+                    ddlCountry.append($("<option></option>").val(country.countryId).html(country.countryName));
+                });
+            },
+            error: function(e) {
+                console.log("Error")
+                console.log(e);
+            }
+        });
+    });
+
+    function isPhoneNumber(event) {
+        console.log(event);
+        if (event.code.match("Digit[0-9]")) {
+            return true;
+        } else if (event.key == "-") {
+            return true;
+        }
+        else if (event.key == "+") {
+            return true;
+        }
+        return false;
+    }
+
+
+</script>
+
+
+
+<link rel="stylesheet" href="~/lib/limonte-sweetalert2/sweetalert2.min.css">
+<script src="~/lib/limonte-sweetalert2/sweetalert2.all.min.js"></script>
+<script src="~/lib/limonte-sweetalert2/sweetalert2.all.js"></script>
+<script src="~/lib/limonte-sweetalert2/sweetalert2.min.js"></script>
+@if (TempData["querySubmit"] != null)
+{
+
+
+    <script>
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+
+        Toast.fire({
+            icon: 'success',
+            title: '@TempData["querySubmit"]'
+        })
+    </script>
+}

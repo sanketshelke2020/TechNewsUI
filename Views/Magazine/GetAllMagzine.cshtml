@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "GetAllMagzine";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@model IEnumerable<TechNewsUI.Models.MagazineListing>
+
+<link rel="stylesheet" href="~/css/GetAllPodcast.css" asp-append-version="true" />
+
+<style>
+    p {
+        margin-left: 0px;
+        padding-left: 0px;
+    }
+</style>
+
+
+<h2 class=" text-center  mt-3">Digital Magazine</h2>
+<div class="row m-3 card-list">
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-4 p-5 col-md-6">
+@*            <a href="GetMagazineById?SectionMasterId=@item.SectionMasterId" style="text-decoration:none">
+*@                <div class="card">
+                    <img class="card-img-top" src="@("data:image/png;base64," + Convert.ToBase64String((byte[])item.Image, 0))" />
+                    <div class="card-body ">
+                        <h5 class="card-title text-dark mb-2">@item.Title</h5>
+                        <div class="card-text text-dark shortdis">
+
+                            <p class="fw-bolder">Description:</p>
+                            <p>@item.ShortDescription</p>
+                            <form method="post" action="PostMagazineDetail">
+                                <input type="number" hidden name="sectionMasterId" id="SectionMasterId" value="@item.SectionMasterId" />
+                                <button class=" btn btn-dark" type="submit" value="hidden">Details</button>
+                            </form>
+                        </div>
+
+                        <p class="card-text text-dark mt-2">
+                            <small class="text-muted">Number Of Pages: @item.NumberOfPages</small>
+                            <span class="text-muted views text-dark">@item.TotalViews <i class="bi bi-eye-fill"></i> &nbsp;</span>
+                        </p>
+                    </div>
+                </div>
+@*            </a>
+*@        </div>
+    }
+</div>
+
+
+

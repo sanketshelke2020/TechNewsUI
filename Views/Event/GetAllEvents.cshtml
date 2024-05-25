@@ -1,0 +1,40 @@
+﻿@model IEnumerable<TechNewsUI.Models.EventSchedule>
+
+<link rel="stylesheet" href="~/css/GetAllPodcast.css" asp-append-version="true" />
+
+<style>
+
+</style>
+
+
+<h2 class=" text-center  mt-3">Events</h2>
+<div class="row m-3 card-list">
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-4 p-5 col-md-6">
+@*            <a asp-controller="Event" asp-action="GetEventById" asp-route-id="@item.SectionMasterId" style="text-decoration:none">
+*@                <div class="card">
+                    <img class="card-img-top" src="@("data:image/png;base64," + Convert.ToBase64String((byte[])item.Image, 0))" />
+                    <div class="card-body">
+                        <h5 class="card-title text-dark mb-2">@item.Title</h5>
+                    <div class="card-text text-dark shortdis">
+
+                        <p class="fw-bolder">Description:</p>
+                        <p>@item.ShortDescription</p>
+                        <form method="post" action="PostEventDetail">
+                            <input type="number" hidden name="sectionMasterId" id="SectionMasterId" value="@item.SectionMasterId" />
+                            <button class=" btn btn-dark" type="submit" value="hidden">Details</button>
+                        </form>
+                    </div>
+                        <p class="card-text text-dark mt-2">
+                            @*<small class="text-muted">Published On:</small>*@
+
+                        </p>
+                    </div>
+                </div>
+@*            </a>
+*@        </div>
+    }
+</div>
+
+

@@ -1,0 +1,26 @@
+﻿body {
+    background: #f4f4f4;
+}
+.mainbg{
+    background: url("../static/Images/main2.jpg") center center;
+    background-size: cover;
+    
+}
+.form-section{
+    margin: 0 auto;
+    width: 20rem;
+}
+.or{
+    margin-top: -28px;
+}
+.form-check-input:checked {
+    background-color: black;
+    border-color: black;
+}
+.row-shadow {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+}
+
+.alert{
+    padding: 0.6rem;
+}

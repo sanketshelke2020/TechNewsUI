@@ -1,0 +1,115 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+
+.backImg img {
+    object-fit: cover;
+    height: 300px;
+}
+
+.backImg {
+    position: relative;
+}
+
+    .backImg:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: inline-block;
+        background: linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.5));
+    }
+
+.container {
+    margin: 0;
+    padding: 0;
+}
+
+.profileIcon {
+    background-color: black;
+    border-radius: 100%;
+    height: 165px;
+    width: 12%;
+    margin-left: 6%;
+    margin-top: -68px;
+    position: absolute;
+}
+
+    .profileIcon img {
+        border-radius: 100%;
+        height: 100%;
+        width: 100%;
+    }
+
+.formContainer .inputvalue {
+    width: 100%;
+    padding: 15px;
+    margin: -1px 0 10px 0;
+    border: none;
+    background: #eee;
+    margin-top: 10px;
+}
+footer .row {
+    margin-left: 6%;
+}
+    .formContainer input :focus {
+        background-color: #ddd;
+        outline: none;
+    }
+.maindiv {
+    border: none;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+    background-color:white;
+    border-radius:30px;
+}
+.formContainer select {
+    width: 100%;
+    padding: 15px;
+    margin: -1px 0 10px 0;
+    border: none;
+    background-color: #eee;
+}
+.formContainer {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+ .formContainer .submitbtn {
+        width: 100%;
+        padding: 15px;
+        margin: -1px 0 10px 0;
+        border: none;
+        margin-top: 10px;
+    }
+.required {
+    color: red;
+}
+.Introname {
+    margin-left: 20%;
+    margin-top: 0%;
+    position: absolute;
+}
+    .Introname h1 {
+        white-space: nowrap;
+        overflow: hidden;
+        font-family: 'Dancing Script', cursive;
+        font-size: 60px;
+    }
+
+/* Animation */
+.Introname h1 {
+        animation: animated-text 7s steps(30,end) 1s 1 normal both;
+    }
+
+/* text animation */
+
+@keyframes animated-text
+{
+    from {
+        width: 0;
+    }
+
+    to {
+        width: 700px;
+    }
+}
+
+

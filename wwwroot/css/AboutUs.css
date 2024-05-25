@@ -1,0 +1,55 @@
+﻿body{
+    background-color: #fefefe;
+}
+.container{
+    margin: 0;
+    padding: 0;
+}
+.mainContainer{
+    height: 65vh;
+}
+.content{
+    margin: auto 20%;
+    margin-top: 12%;
+}
+.content h1 {
+        font-family: 'Aldrich', sans-serif;
+        font-size: 3.5rem;
+    }
+.content p{
+    letter-spacing: 1px;
+    margin: auto 10%;
+    
+}
+article{
+   
+}
+.articleSideContent p{
+    text-align: justify;    
+}
+.articleSideContent span {
+    color: #8f8f8f;
+}
+.developer img{
+    object-fit: cover;
+    border-radius: 50%;
+    height: 150px;
+    width: 150px;
+}
+.developers p {
+    color: #8f8f8f;
+}
+.parallex {
+    /* The image used */
+    background-image: url("~/Image/machineLearning.jpg");
+    /* Set a specific height */
+    min-height: 500px;
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+footer .row {
+    margin-left: 9%;
+}

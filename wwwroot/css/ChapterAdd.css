@@ -1,0 +1,78 @@
+﻿.loginPopup {
+    position: absolute;
+        
+    width: 100%;
+}
+.EditPopup {
+    position: absolute;
+    
+    width: 100%;
+}
+
+.formPopup {
+    display: none;
+    position: fixed;
+    left: 45%;
+    top: 5%;
+    transform: translate(-50%, 5%);
+    border: 3px solid #999999;
+    z-index: 9;
+    margin-left: 14%;
+    align-content: center;
+}
+
+.formContainer {
+    max-width: 400px;
+    padding: 20px;
+    background-color: #fff;
+}
+
+    .formContainer input  {
+        width: 100%;
+        padding: 10px;
+        margin: -1px 0 10px 0;
+        border: none;
+        background: #eee;
+    }
+
+ .formContainer input :focus {
+            background-color: #ddd;
+            outline: none;
+        }
+
+    .formContainer .btn {
+        padding: 12px 20px;
+        border: none;
+        background-color: black;
+        color:white;
+        cursor: pointer;
+        width: 100%;
+        margin-bottom: 15px;
+        opacity: 0.8;
+    }
+
+    .formContainer .cancel {
+        background-color: #cc0000;
+    }
+
+    .formContainer .btn:hover,
+    .openButton:hover {
+        opacity: 1;
+    }
+.blur-filter {
+    -webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -o-filter: blur(2px);
+    -ms-filter: blur(2px);
+    filter: blur(2px);
+}
+.dataTables_wrapper {
+    width: 100%;
+    padding: 10px;
+}
+.dataTables_filter input {
+    margin-bottom: 27px
+}
+body{
+    overflow-x:hidden;
+}

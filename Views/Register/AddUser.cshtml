@@ -1,0 +1,437 @@
+﻿@model TechNewsUI.Models.RegisterDto
+
+@{
+    Layout = null;
+}
+@if (TempData["success"] != null)
+{
+
+
+    <script>
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+
+        Toast.fire({
+            icon: 'success',
+            title: '@TempData["success"]'
+        })
+    </script>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Register</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+
+    <style>
+    .required {
+        color: red;
+    }
+
+    div.form-group{
+        padding:7px;
+    }
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+
+    }
+
+    .tooltip {
+        display: inline-block;
+    }
+
+        .tooltip .tooltiptext {
+            margin-left: 9px;
+            width: 320px;
+            visibility: hidden;
+            background-color: #FFF;
+            border-radius: 4px;
+            border: 1px solid #aeaeae;
+            position: absolute;
+            z-index: 1;
+            padding: 5px;
+            margin-top: -15px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+            .tooltip .tooltiptext::after {
+                content: " ";
+                position: absolute;
+                top: 5%;
+                right: 100%;
+                margin-top: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: transparent #aeaeae transparent transparent;
+            }
+
+        
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        .form-control.is-valid, .was-validated .form-control:valid {
+    border-color: #ced4da;
+    padding-right: 0;
+    background-image: none;
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+    .form-control.is-valid, .was-validated .form-control:valid:focus {
+        border-color: #ced4da;
+        box-shadow: 0 0 0 0.25rem rgb(25 135 84 / 25%)
+    }
+      .form-group.is-valid, .was-validated, .form-group:valid {
+    border-color: #ced4da;
+    padding-right: 0;
+    background-image: none;
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+
+    .form-group.is-valid, .was-validated .form-group:valid:focus {
+        border-color: #ced4da;
+        box-shadow: 0 0 0 0.25rem rgb(25 135 84 / 25%)
+    }
+
+    .was-validated {
+        background-image: none;
+    }
+
+</style>
+
+
+
+</head>
+<body>
+
+    <div class="container d-flex justify-content-center align-items-center  p-5  needs-validation" novalidate>
+        <div class="row bg-white w-100 h-100" style="box-shadow: rgb(17 12 46 / 20%) 0px 48px 100px 0px;">
+            
+                                    <a class="navbar-brand mt-5 d-flex justify-content-center"  asp-area="" asp-controller="HomePage" asp-action="GetBreakingNews" style="margin-left:10px;"><img src="~/Image/Tech1.png" height="43px"/></a>
+
+            <div class="container h-100 w-50 justify-content-center align-items-center">
+                <div class="mainHeading text-center m-4">
+                    <h2>Welcome</h2>
+                    <p>Quick news on Tech Newz</p>
+                </div>
+                <div class="form-section">
+                    <form asp-action="AddUser" class="needs-validation" novalidate>
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="FirstName"  class="control-label" ></label>
+                            <span class="required">*</span>
+                            
+                            <input style="width:400;" asp-for="FirstName" class="form-control" required />
+                           
+
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="LastName" class="control-label"></label>
+                            <span class="required">*</span>
+
+                            <input style="width:400;" asp-for="LastName" class="form-control" required />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="CompanyName" class="control-label"></label>
+                            <span class="required">*</span>
+
+                            <input style="width:400;" asp-for="CompanyName" class="form-control" required />
+                            <span asp-validation-for="CompanyName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="PhoneNumber" class="control-label"></label>
+
+                            <span class="required">*</span>
+                            <input style="width:400;" asp-for="PhoneNumber" type="text" class="form-control" onkeypress="return isPhoneNumber(event)" required />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                       
+                        <div class="form-group">    
+                            <label asp-for="Email" class="control-label"></label>
+                            <span class="required">*</span>
+                            <input style="width:400;" asp-for="Email" class="form-control" required />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="UserName" class="control-label"></label>
+                            <span class="required">*</span>
+
+                            <input style="width:400;" asp-for="UserName" class="form-control" required />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Password" class="control-label"> </label>
+                            <span class="required">*</span>
+
+                            <input style="width:400;" asp-for="Password" type="password" class="form-control" id="PassField" required />
+                            <div id="PassDesc">
+                            
+                                <span >
+                                    Length should between 8 to 16 <br> One Specail Character<br> Captial and small alpabets are required
+                                </span>
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="ConfirmPassword" class="control-label"></label>
+                            <span class="required">*</span>
+                            
+                            <input style="width:400;" asp-for="ConfirmPassword" class="form-control" required />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Nationality" class="control-label"></label>
+                            <span class="required">*</span>
+
+                            <input style="width:400;" asp-for="Nationality" class="form-control" required />
+                            <span asp-validation-for="Nationality" class="text-danger"></span>
+                        </div>
+                      
+                        <div class="form-group">
+                            <label asp-for="CountryId" class="control-label"></label>
+                            <span class="required">*</span>
+
+                            <select style="width:400;" asp-for="CountryId" class="form-select" asp-items="ViewBag.CountryId" required><option value="">--Country--</option></select>
+                            <span asp-validation-for="CountryId" class="text-danger"></span>
+
+                        </div>
+                       
+                        <div class="form-group">
+                            <label asp-for="StateId" class="control-label"></label>
+                            <span class="required">*</span>
+
+                            <select style="width:400;" asp-for="StateId" class="form-select" asp-items="ViewBag.StateId" required><option value="">--State--</option></select>
+                            <span asp-validation-for="StateId" class="text-danger"></span>
+                        </div>
+                      
+                        <div class="form-group">
+                            <label asp-for="CityId" class="control-label"></label>
+                            <span class="required">*</span>
+
+                            <select style="width:400;" asp-for="CityId" class="form-select" asp-items="ViewBag.CityId" required><option value="">--City--</option></select>
+                            <span asp-validation-for="CityId" class="text-danger"></span>
+
+                        </div>
+                     
+                        <div class="form-group" hidden>
+                            <label asp-for="UserRoleId" class="control-label"></label>
+                            <span class="required">*</span>
+
+                            <select style="width:400;"asp-for="UserRoleId" class="form-select" asp-items="ViewBag.UserRoleId" required><option value="">--UserRole--</option></select>
+                            <span asp-validation-for="UserRoleId" class="text-danger"></span>
+
+                        </div>
+
+
+                        <div class="form-group text-center p-5" style="width:400;">
+                            <input style="width:400;" type="submit" value="Register" class="btn btn-dark w-100" />
+                        </div>
+                    </form>
+                   
+
+                    <p class="my-3 text-center">If already register? <a asp-action="Login" asp-controller="login" class="text-dark fw-bold">Login here</a></p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+
+
+
+
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+
+
+
+
+        console.log("script is working");
+
+        function isPhoneNumber(event) {
+            console.log(event);
+            if(event.code.match("Digit[0-9]")){
+                return true;
+            } else if (event.key == "-"){
+                return true;
+            }
+            else if (event.key == "+") {
+                return true;
+            }
+            return false;
+        }
+
+        $(document).ready(function () {
+
+            const PassDesc = $('#PassDesc').hide();
+            $('#PassField').mouseenter(() => {
+                PassDesc.show()
+            }).mouseleave(() => {
+                PassDesc.hide()
+            })
+
+            var ddlCountry = $('#CountryId');
+            $.ajax({
+                url: '/Register/GetAllCountries',
+                headers: { 'Access-Control-Allow-Origin': '*' },
+                type: 'POST',
+                dataType: 'json',
+                //data: { countryId: countryId },
+                success: function (d) {
+                    ddlCountry.empty();
+                    ddlCountry.append($("<option></option>").val("").html("--Country--"));
+
+                    $.each(d, function (i, country) {
+                        ddlCountry.append($("<option></option>").val(country.countryId).html(country.countryName));
+                    });
+                },
+                error: function (e) {
+                    console.log("Error")
+                    console.log(e);
+                }
+            });
+
+            var ddlUserRole = $('#UserRoleId');
+            $.ajax({
+                url: '/Register/GetAllUserRoles',
+                headers: { 'Access-Control-Allow-Origin': '*' },
+                type: 'POST',
+                dataType: 'json',
+                //data: { countryId: countryId },
+                success: function (d) {
+                    ddlUserRole.empty();
+                    ddlUserRole.append($("<option></option>").val("").html("--Role--"));
+
+                    $.each(d, function (i, country) {
+                        ddlUserRole.append($("<option></option>").val(country.userRoleId).html(country.roleName));
+                    });
+                    ddlUserRole.val('1');
+                },
+                error: function (e) {
+                    console.log("Error")
+                    console.log(e);
+                }
+            });
+            $("#CountryId").change(function () {
+                var countryId = parseInt($(this).val());
+
+                if (!isNaN(countryId)) {
+                    var ddlState = $('#StateId');
+                    ddlState.empty();
+                    $.ajax({
+                        url: '/Register/GetAllStates/',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { countryId: countryId },
+                        success: function (d) {
+                            ddlState.empty(); // empty the list for new selecting state
+                            ddlState.append($("<option></option>").val("").html("--State--"));
+                            $.each(d, function (i, states) {
+                                ddlState.append($("<option></option>").val(states.stateId).html(states.stateName));
+                            });
+                        },
+                        error: function () {
+                            alert('Error!');
+                        }
+                    });
+                }
+                //
+
+            });
+            $("#StateId").change(function () {
+                var stateId = parseInt($(this).val());
+
+                if (!isNaN(stateId)) {
+                    var ddlCity = $('#CityId');
+                    ddlCity.empty();
+                    $.ajax({
+                        url: '/Register/GetAllCities/',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { stateId: stateId },
+                        success: function (d) {
+                            ddlCity.empty(); // empty the list for new selecting city
+                            ddlCity.append($("<option></option>").val("").html("--City--"));
+
+                            $.each(d, function (i, cities) {
+                                ddlCity.append($("<option></option>").val(cities.cityId).html(cities.cityName));
+                            });
+                        },
+                        error: function () {
+                            alert('Error!');
+                        }
+                    });
+                }
+
+            });
+        });
+
+    </script>
+</body>
+
+
+
+
+
+</html>
+

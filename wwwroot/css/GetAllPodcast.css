@@ -1,0 +1,110 @@
+﻿.card {
+    margin: 0 auto;
+    border: none;
+    border-radius: 20px;
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+    transition: transform 330ms ease-in-out;
+}
+
+.card img, .card-img-top {
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.card .views {
+    float: right;
+}
+.card:hover {
+    transform: scale(1.1);
+}
+.card {
+    margin: 0 auto;
+    border: none;
+    border-radius: 20px;
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+    transition: transform 330ms ease-in-out;
+}
+
+    .card img, .card-img-top {
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+
+    .card .views {
+        float: right;
+    }
+
+    .card:hover {
+        transform: scale(1.1);
+    }
+
+    .card img {
+        height: 215px;
+    }
+
+.shortdis {
+    display: block;
+    font-size: 0.5 rem;
+    position: absolute;
+    height: 0;
+    top: 0;
+    opacity: 0;
+    padding: 18px 8%;
+    background-color: white;
+    overflow-y: scroll;
+    transition: 0.8s ease;
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.card:hover .shortdis {
+    opacity: 1;
+    height: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.card-body h5 {
+    height: 48px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.card img{
+    height:215px;
+}
+
+.shortdis {
+    display: block;
+    font-size: 0.5 rem;
+    position: absolute;
+    height: 0;
+    top: 0;
+    opacity: 0;
+    padding: 18px 8%;
+    background-color: white;
+    overflow-y: scroll;
+    transition: 0.8s ease;
+    width: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.card:hover .shortdis {
+    opacity: 1;
+    height: 100%;   
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.card-body h5 {
+    height: 48px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.card-title {
+    display: -webkit-box;
+    max-width: 300px;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}

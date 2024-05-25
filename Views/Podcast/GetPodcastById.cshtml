@@ -1,0 +1,409 @@
+﻿@using Microsoft.AspNetCore.Http
+@model TechNewsUI.Models.Podcast
+
+<link rel="stylesheet" href="~/css/PodcastDetails.css" asp-append-version="true" />
+<style>
+    .container {
+        margin: 0px;
+        padding: 0;
+    }
+
+    .main {
+        width: 100vw;
+    }
+
+    .card-img-top {
+        width: 70%;
+        /*height: 15vw;*/
+        object-fit: fill;
+    }
+
+    .image {
+        object-fit: fill;
+        border-radius: 22px;
+        height: 400px;
+        box-shadow: rgb(255 255 255 / 10%) 0px 1px 1px 0px inset, rgb(50 50 93 / 25%) 0px 50px 100px -20px, rgb(0 0 0 / 30%) 0px 30px 60px -30px;
+    }
+
+    .details {
+        border-radius: 22px;
+        height: 400px;
+        box-shadow: rgb(17 12 46 / 15%) 0px 48px 100px 0px;
+    }
+
+        .details h3 {
+            text-transform: capitalize;
+            font-size: 1.2rem;
+        }
+
+    .top-row .col:first-child {
+        padding-right: 1.5rem !important;
+    }
+
+    .top-row .col:last-child {
+        padding-left: 1.5rem !important;
+    }
+
+    .bottom-row .col:first-child {
+        padding-right: 1.5rem !important;
+    }
+
+    .bottom-row .col:last-child {
+        padding-left: 1.5rem !important;
+    }
+
+    .bottom-row .col {
+        height: 500px;
+        margin-top: -3rem !important;
+    }
+
+    .top-row .imgDiv{
+        padding-left: 5rem;
+    }
+    .chapters {
+        border-radius: 20px;
+    }
+
+        .chapters .row {
+            padding: 14px 10px;
+            border-radius: 12px;
+            margin: 0 auto;
+            background: #f8f8f8;
+            align-items: center;
+            margin-bottom: 13px;
+        }
+
+    .playDiv {
+        font-size: 1.7rem;
+    }
+
+    .chapterDivTitle {
+        margin-left: 1.5rem;
+        margin-bottom: -1rem;
+    }
+
+    /*audio styling*/
+    audio {
+        width: 90%;
+        height: 50px;
+        margin-bottom: 1rem;
+    }
+
+    .player {
+        border-radius: 22px;
+        box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+    }
+
+        .player img {
+            width: 100%;
+            border-radius: 19px;
+        }
+        .comming-div{
+            height: 300px;
+        display: grid;
+        place-items: center;
+        border-radius: 10px;
+        color: white;
+        background: #606c88;
+        background: -webkit-linear-gradient(to right, #3f4c6b, #606c88);
+        background: linear-gradient(to right, #3f4c6b, #606c88);
+        }
+</style>
+
+
+@*
+<div class="card" style="width: 100%;">
+    <h5 class="card-title text-center p-3 mt-3">@Model.Title</h5>
+    <img src="@("data:image/png;base64," + Convert.ToBase64String((byte[])Model.Image, 0))" class="p-4" />
+    <div class="card-body">
+        <div class="container mt-3 p-3">
+            <div class="card p-3">
+                <h4 class="card-title">Description</h4>
+                <p class="card-text" text-center p-3>@Model.LongDescription</p>
+
+            </div>
+        </div>
+        <div class="container mt-3 p-3">
+            <div class="card p-3">
+                <h4 class="card-title">Chapter</h4>
+                <div class="container d-flex my-2">
+                    @if(Model.Chapters.Count() > 0)
+                    {
+                    @foreach (var item in @Model.Chapters)
+                    {  <div class="chapterhover">
+                        <a asp-action="GetChapterById" asp-route-id="@item.ChapterId" style="text-decoration:none">
+                        <div class="card my-3 mx-4 text-dark" style="width: 40px;display:flex;background-color: grey;">
+                        <h5 class="ccard-title mx-2 p-1">@item.ChapterNumber</h5>
+                        </div>
+                        </a>
+                        </div>
+                    }
+                    }
+                    else
+                    {
+
+                        <h5> Coming Soon!!!!</h5>
+                    }
+                </div>
+             </div>
+
+        </div>
+</div>
+
+
+@*display user comments*@
+@*<div class="container mt-3 p-4">
+    <h4 class="card-title">Comments</h4>
+    @foreach (var chap in @Model.comment)
+    {
+
+
+        <div class="card p-3 my-2">
+
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="user d-flex flex-row align-items-center">
+                    <i class="bi bi-person user-img rounded-circle mx-3" width="30"></i>
+                    <span><small class="fw-bolder text-dark ">@chap.Email</small> :<small class="font-weight-bold mx-2">@chap.CommentDescription</small></span>
+                </div>
+
+            </div>
+        </div>
+    }
+</div>*@
+@*comment box for user*@
+@*    @if(Context.Session.GetString("Token") != null)
+    {
+          <form asp-action="AddComment" asp-route-id=@Model.SectionMasterId >
+<div class="container md-form p-4">
+    <i class="bi bi-pencil-fill" prefix"></i>
+    <div class="d-flex justify-content-between align-items-center">
+
+        <textarea id="form10" name="commentdis"  class="md-textarea form-control" rows="4" required></textarea>
+        <span  class="text-danger"></span>
+
+    </div>
+    <input type="submit" value="Comment" class="btn btn-primary mt-3" />
+
+</div>
+        </form>
+    }
+    else
+    {
+           <form asp-action="AddComment" asp-route-id=@Model.SectionMasterId >
+<div class="container md-form p-4">
+    <i class="bi bi-pencil-fill" prefix"></i>
+    <div class="d-flex justify-content-between align-items-center">
+
+        <textarea id="form10" name="commentdis"  class="md-textarea form-control" rows="4" required disabled placeholder="Please login first to add comment"></textarea>
+        <span  class="text-danger"></span>
+
+    </div>
+    <input type="submit" value="Comment" class="btn btn-primary mt-3" disabled />
+
+</div>
+</form>
+    }
+
+*@
+
+<script>
+    function playAudio(chapterId){
+        $.ajax({
+            url: '/Podcast/GetChapterByIdJson',
+            headers: { 'Access-Control-Allow-Origin': '*' },
+            type: 'POST',
+            dataType: 'json',
+            data: { id: chapterId },
+            success: function (d) {
+                console.log(d);
+                document.getElementById('ChapterTitle').innerText = d.chapterTitle;
+                document.getElementById('ChapterNumber').innerText = d.chapterNumber;
+                let audioTag = document.getElementById('ChapterAudio');
+                audioTag.src = `data:audio/mp3;base64,${d.audio}`
+        console.log(audioTag)
+    },
+            error: function (e) {
+                console.log("Error")
+                console.log(e);
+            }
+        }
+    );
+    }
+</script>
+
+<div class="main">
+
+    <div class="row w-100 top-row">
+        <div class="col-8 pt-5 imgDiv">
+            <img src="@("data:image/png;base64," + Convert.ToBase64String((byte[])Model.Image, 0))" class="image w-100" />
+        </div>
+        <div class="col-4 p-5">
+            <div class="details bg-white w-100 p-5">
+                <h3>@Model.Title</h3>
+                <p>@Model.ShortDescription</p>
+                @*<p>@Model.LongDescription</p>*@
+            </div>
+        </div>
+    </div>
+     @if (Model.Chapters.Count() > 0)
+    {
+        <div class="row w-100 bottom-row">
+            <h4 class="px-5 chapterDivTitle">Chapters</h4>
+            <div class="col-8 p-5">
+                <div class="chapters h-100 p-3">
+
+                    @foreach (var item in @Model.Chapters)
+                    {
+                        <div class="row w-100 bg-white" onclick="playAudio(@item.ChapterId)">
+                            <div class="col-4">
+                                <div class="chapterNumber">
+                                    @item.ChapterNumber
+                                </div>
+                            </div>
+                            <div class="col-7">
+                                @item.ChapterTitle
+                            </div>
+                            <div class="col-1 playDiv">
+                                <i class="bi bi-play-fill"></i>
+                            </div>
+                        </div>
+                    }
+
+            </div>
+        </div>
+        <div class="col-4 p-5">
+            <div class="player bg-white text-center p-3">
+                <h4 class="mt-1">Now Playing</h4>
+                <div class="playerImage p-4">
+                    <img src="~/Image/music.jpg" />
+                </div>
+                <h6 id="ChapterTitle">@Model.Chapters.FirstOrDefault().ChapterTitle</h6>
+                <h6 id="ChapterNumber">@Model.Chapters.FirstOrDefault().ChapterNumber</h6>
+                <audio id="ChapterAudio" controls src="@("data:audio/mp3;base64," + Convert.ToBase64String((byte[])Model.Chapters.FirstOrDefault().Audio, 0))">
+                </audio>
+            </div>
+        </div>
+        </div>
+    }
+    else
+    {
+        <div class="comming-div m-5 w-80">
+            <h2>Comming Soon</h2>
+        </div>
+    }
+</div>
+@*display user comments*@
+<div class="container mt-3 p-4">
+    <h4 class="card-title">Comments</h4>
+    <button class="btn btn-outline-secondary" onclick="openForm()" style="margin-left: 89%;margin-top: -60px;"> <i class="bi bi-share mx-2"></i>Share</button>
+    @foreach (var chap in @Model.comment)
+    {
+
+
+        <div class="card p-3 my-2">
+
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="user d-flex flex-row align-items-center">
+                    <i class="bi bi-person user-img rounded-circle mx-3" width="30"></i>
+                    <span><small class="fw-bolder text-dark ">@chap.Email</small> :<small class="font-weight-bold mx-2">@chap.CommentDescription</small></span>
+                </div>
+
+            </div>
+        </div>
+    }
+</div>
+@*comment box for user*@
+   @if(Context.Session.GetString("Token") != null)
+    {
+          <form asp-action="AddComment" asp-route-id=@Model.SectionMasterId >
+<div class="container md-form p-4" style="margin-left:10%">
+    <i class="bi bi-pencil-fill" prefix"></i>
+    <div class="d-flex justify-content-between align-items-center">
+
+        <textarea id="form10" name="commentdis"  class="md-textarea form-control" rows="4" required></textarea>
+        <span  class="text-danger"></span>
+
+    </div>
+    <input type="submit" value="Comment" class="btn btn-primary mt-3" />
+
+</div>
+        </form>
+    }
+    else
+    {
+           <form asp-action="AddComment" asp-route-id=@Model.SectionMasterId >
+<div class="container md-form p-4" style="margin-left:10%">
+    <i class="bi bi-pencil-fill" prefix"></i>
+    <div class="d-flex justify-content-between align-items-center">
+
+        <textarea id="form10" name="commentdis"  class="md-textarea form-control" rows="4" required disabled placeholder="Please login first to add comment"></textarea>
+        <span  class="text-danger"></span>
+
+    </div>
+    <input type="submit" value="Comment" class="btn btn-primary mt-3" disabled />
+
+</div>
+</form>
+    }
+</div>
+@{
+            var Request = Context.Request;
+            var location = new Uri($"{Request.Scheme}://{Request.Host}{Request.Path}{Request.QueryString}");
+
+            var url = location.AbsoluteUri;
+
+        }
+<div class="Sharediv">
+    <div class="sharepop" id="popform">
+        <div class="btnClose">
+            <button class="btnClose" onclick="closeForm()"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="heading mb-5 text-center">Share a Post</div>
+        <hr />
+        <div class="socilaMediaicon d-flex justify-content-around  ">
+            <a href="http://twitter.com/share?url=@url" class="btn btn-outline-primary btn-floating m-1 rounded-circle " title="share on twitter"><i class="bi bi-twitter"></i></a>
+            <a href="whatsapp://send?url=@url" data-action="share/whatsapp/share" class="btn btn-outline-success btn-floating m-1 rounded-circle" title="share on whatsapp" target="_blank"> <i class="bi bi-whatsapp"></i></a>
+            <a href="http://www.facebook.com/sharer.php?url=@url" class="btn btn-outline-info btn-floating m-1 rounded-circle" title="share on facebook"><i class="bi bi-facebook"></i></a>
+        </div>
+        <div class="copyLink text-center">
+            <input value="@url"id="Url" class="w-100 my-3" /><br />
+
+            <button class="btn btn-lg btn-dark rounded-pill" onclick="CopyText()">Copy</button>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    function closeForm() {
+        document.getElementById("popform").style.display = "none";
+        var element = document.getElementById("Detailedpage");
+        element.classList.remove("blur-filter");
+        var element = document.getElementById("Footerfixed");
+        element.classList.remove("blur-filter");
+
+    }
+    function openForm() {
+        document.getElementById("popform").style.display = "block";
+        var element = document.getElementById("Detailedpage");
+        element.classList.add("blur-filter");
+        var element = document.getElementById("Footerfixed");
+        element.classList.add("blur-filter");
+
+    }
+    function CopyText() {
+        // Get the text field
+        var copyText = document.getElementById("Url");
+
+        // Select the text field
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText.value);
+
+        // Alert the copied text
+    }
+</script>
+
+

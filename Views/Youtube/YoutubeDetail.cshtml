@@ -1,0 +1,168 @@
+﻿@using Microsoft.AspNetCore.Http
+
+
+@model TechNewsUI.Models.YoutubeDtoDetail
+
+@{
+    ViewData["Title"] = "GetYoutubeDetailById";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/PodcastDetails.css" asp-append-version="true" />
+@*<style>
+    .card-img-top {
+        width: 70%;
+        object-fit: fill;
+    }
+    .desc{
+        font-family: "Lato",sans-serif;
+        font-size: 16px;
+    }
+       
+    
+</style>
+*@
+
+
+<div class="page" style="width: 100%; " id="Detailedpage">
+    <section class="section header">
+        <h1 class="header__title">Keeping our edge in technology</h1>
+        <div>
+            <img class="header__img" src="@("data:image/png;base64," + Convert.ToBase64String((byte[])Model.Image, 0))">
+            <div class="header__description">
+                <h2 class="card-title">Description</h2>
+                <p class="desc">@Model.LongDescription</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section youtube-video">
+        <div class="youtube-video__iframe">
+            <iframe src="@Model.YoutubeVideoLink" height="500px" width="1000px"></iframe>
+        </div>
+
+        <div class="youtube-video__details mt-3">
+            <span>
+                <small>Published Date:&nbsp;</small>
+                <small>@Model.Published</small>
+            </span>
+
+            <button class="btn btn-outline-secondary" onclick="openForm()">
+                <i class="bi bi-share mx-2"></i>
+                <span>Share</span>
+            </button>
+        </div>
+    </section>
+
+    <section class="video-comments">
+        <h4 class="comment-title">Comments</h4>
+        <div class="comment-list">
+        @foreach (var chap in @Model.comments)
+        {
+            <div class="comment-card">
+                <i class="bi bi-person user-img rounded-circle mx-3" width="30"></i>
+                    <span class="comment-card__email text-dark">@chap.Email</span>
+                    <span>:</span>
+                    <span class="font-weight-bold mx-2">@chap.CommentDescription</span>
+            </div>
+        }
+        </div>
+
+        @*comment box for user*@
+        <div class="mt-3">
+        @if (Context.Session.GetString("Token") != null)
+        {
+            <form asp-action="AddComment" asp-route-id=@Model.SectionMasterId>
+                <div class="md-form">
+                    <i class="bi bi-pencil-fill" prefix"></i>
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <textarea id="form10" name="commentdis" class="md-textarea form-control" rows="4" required></textarea>
+                        <span class="text-danger"></span>
+
+                    </div>
+                    <input type="submit" value="Comment" class="btn btn-primary mt-3" />
+
+                </div>
+            </form>
+        }
+        else
+        {
+            <form asp-action="AddComment" asp-route-id=@Model.SectionMasterId>
+                <div class="container md-form p-4">
+                    <i class="bi bi-pencil-fill" prefix"></i>
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <textarea id="form10" name="commentdis" class="md-textarea form-control" rows="4" required disabled placeholder="Please login first to add comment"></textarea>
+                        <span class="text-danger"></span>
+
+                    </div>
+                    <input type="submit" value="Comment" class="btn btn-primary mt-3" disabled />
+
+                </div>
+            </form>
+        }
+        </div>
+    </section>
+</div>
+
+@{
+    var Request = Context.Request;
+    var location = new Uri($"{Request.Scheme}://{Request.Host}{Request.Path}{Request.QueryString}");
+
+    var url = location.AbsoluteUri;
+
+}
+<div class="Sharediv">
+    <div class="sharepop" id="popform">
+        <div class="btnClose">
+            <button class="btnClose" onclick="closeForm()"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="heading mb-5 text-center">Share a Post</div>
+        <hr />
+        <div class="socilaMediaicon d-flex justify-content-around  ">
+            <a href="http://twitter.com/share?url=@url" class="btn btn-outline-primary btn-floating m-1 rounded-circle " title="share on twitter"><i class="bi bi-twitter"></i></a>
+            <a href="whatsapp://send?url=@url" data-action="share/whatsapp/share" class="btn btn-outline-success btn-floating m-1 rounded-circle" title="share on whatsapp" target="_blank"> <i class="bi bi-whatsapp"></i></a>
+            <a href="http://www.facebook.com/sharer.php?url=@url" class="btn btn-outline-info btn-floating m-1 rounded-circle" title="share on facebook"><i class="bi bi-facebook"></i></a>
+        </div>
+        <div class="copyLink text-center">
+            <input value="@url" id="Url" class="w-100 my-3" /><br />
+
+            <button class="btn btn-lg btn-dark rounded-pill" onclick="CopyText()">Copy</button>
+        </div>
+
+    </div>
+</div>
+    
+
+<script type="text/javascript">
+    function closeForm() {
+        document.getElementById("popform").style.display = "none";
+        var element = document.getElementById("Detailedpage");
+        element.classList.remove("blur-filter");
+        var element = document.getElementById("Footerfixed");
+        element.classList.remove("blur-filter");
+
+    }
+    function openForm() {
+        document.getElementById("popform").style.display = "block";
+        var element = document.getElementById("Detailedpage");
+        element.classList.add("blur-filter");
+        var element = document.getElementById("Footerfixed");
+        element.classList.add("blur-filter");
+
+    }
+    function CopyText() {
+        // Get the text field
+        var copyText = document.getElementById("Url");
+
+        // Select the text field
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText.value);
+
+        // Alert the copied text
+    }
+</script>

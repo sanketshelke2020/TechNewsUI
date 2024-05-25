@@ -1,0 +1,67 @@
+﻿@model IEnumerable<TechNewsUI.Models.GetLiveInterviewDto>
+
+@{
+    ViewData["Title"] = "GetAllLiveInterview";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    var list = Model.OrderByDescending(x => x.CreatedDate).ToList();
+    GetLiveInterviewDto firstItem = list.First();
+    list.Remove(firstItem);
+}
+<link rel="stylesheet" href="~/css/GetAllLiveInterview.css" asp-append-version="true" />
+
+<div class="hero bg-white my-5" onclick="location.href = '@(Url.Action("GetLiveInteviewById","LiveInterview", new { SectionMasterId = firstItem.SectionMasterId}))'">
+    <div class="row h-100 p-3">
+        <div class="col-5 h-100">
+            <img class="mainImage w-100 h-100" src="@("data:image/png;base64," + Convert.ToBase64String((byte[])firstItem.Image, 0))" />
+        </div>
+        <div class="col-7 h-100 position-relative px-3 ">
+            <h2>@firstItem.Title</h2>
+            <p class="my-3">@firstItem.ShortDescription</p>
+            <form method="post" action="PostInterviewDetail">
+                <input type="number" hidden name="sectionMasterId" id="SectionMasterId" value="@firstItem.SectionMasterId" />
+                <button class=" btn btn-dark" type="submit" value="hidden">Details</button>
+            </form>
+            <div class="row w-100 position-absolute info text-muted">
+                <div class="col">
+                    <script>
+                        document.write(timeSince(new Date("@firstItem.CreatedDate.ToString()")) + " ago");
+                    </script>
+                </div>
+                <div class="col w-100 text-end ">
+                    <span>@firstItem.TotalViews <i class="bi bi-eye"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<article class="mt-5 row card-list pt-3">
+    @foreach(var item in list)
+    {
+        <div class="col-lg-4 p-5 col-md-6">
+        <div class="card" onclick="location.href = '@(Url.Action("GetLiveInteviewById","LiveInterview", new { SectionMasterId = item.SectionMasterId}))'">
+            <img class="card-img-top w-100" src="@("data:image/png;base64," + Convert.ToBase64String((byte[])item.Image, 0))" />
+            <div class="card-body p-0">
+                <div class="row w-100 m-0 p-0 my-3 card-info text-muted">
+                    <div class="col p-0">
+                        <script>
+                            document.write(timeSince(new Date("@item.CreatedDate")) + " ago");
+                        </script>
+                    </div>
+                    <div class="col w-100 text-end p-0">
+                        <span>@item.TotalViews <i class="bi bi-eye"></i></span>
+                    </div>
+                </div>
+                <h5 class="card-title">@item.Title</h5>
+                <p class="card-text pt-1">@item.ShortDescription</p>
+                    <form method="post" action="PostInterviewDetail">
+                        <input type="number" hidden name="sectionMasterId" id="SectionMasterId" value="@item.SectionMasterId" />
+                        <button class="stretched-link bg-transparent border-0 text-primary text-decoration-underline" type="submit" value="hidden">Details</button>
+                    </form>
+            </div>
+        </div>
+        </div>
+    }
+    
+</article>

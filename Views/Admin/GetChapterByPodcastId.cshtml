@@ -1,0 +1,327 @@
+﻿@{
+    ViewData["Title"] = "GetChapterByPodcastId";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+@model IEnumerable<TechNewsUI.Models.ChaptersDto>
+
+<link rel="stylesheet" href="~/css/ChapterAdd.css" asp-append-version="true" />
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" />
+
+
+<div class="mx-5 my-5 d-flex justify-content-between" id="tblCustomers2">
+    <h4 class="text-opacity-75">List of Chapters</h4>
+    <a onclick="openForm()" class="btn btn-dark rounded"><i class="bi bi-plus-circle"></i> Add Chapter</a>
+
+</div>
+
+<div class="d-flex justify-content-center align-items-center  p-3  ">
+    <table id="tblCustomers"  data-getAllTable class="table table-striped  mb-4 mx-3">
+        <thead>
+            <tr class="bg-light">
+                <th hidden>ChapterId </th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>ChapterNumber</th>
+                <th>Audio</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @foreach (var item in Model)
+            {
+
+
+                <tr>
+                    <td class="ChapterId" hidden>
+                        <span>@item.ChapterId</span>
+                    </td>
+                    <td class="ChapterTitle">
+                        <span>@item.ChapterTitle</span>
+                        <input type="text" value="@item.ChapterTitle" style="display:none" />
+                    </td>
+                    <td class="ChapterDescription" style="height:100px;">
+                        <span>@item.ChapterDescription</span>
+                        <input type="text" value="@item.ChapterDescription" style="display:none" />
+                    </td>
+                    <td class="ChapterNumber">
+                        <span>@item.ChapterNumber</span>
+                        <input type="text" value="@item.ChapterNumber" style="display:none" />
+                    </td>
+                    <td class="Audio">
+
+
+                        <audio controls controlsList="nodownload">
+                            <source src="@("data:audio/mp3;base64," + Convert.ToBase64String((byte[])item.Audio, 0))">
+                        </audio>
+                    </td>
+                    <td>
+                        <div class="d-flex">
+                            <a class="mx-2 h5" onclick="DeleteAlert(@item.ChapterId)"><i class="bi bi-trash"></i></a>
+                            <a onclick="openForm2(@item.ChapterId)" id="editclick" class="mx-2 h5"><i class="bi bi-pencil-square"></i></a>
+
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+<div class="loginPopup">
+    <div class="formPopup" id="popupForm">
+        <form asp-action="AddChapter" class="formContainer" id="FormData" enctype="multipart/form-data">
+            <label for="email">
+                <strong> Chapter Title</strong>
+            </label>
+            <input type="text" id="chapterTitle" placeholder="Chapter Title" name="ChapterTitle" required>
+            <label for="psw">
+                <strong>Chapter Description</strong>
+            </label>
+            <input type="text" id="chapterDescription" placeholder="Chapter Description" name="ChapterDescription" required>
+            <label for="psw">
+                <strong>Chapter Number</strong>
+            </label>
+            <input type="number" id="chapterNumber" placeholder="Chapter Number" name="ChapterNumber" required>
+            <span id="chapterNmberError2" class="text-danger d-flex"></span>
+            <label for="psw">
+                <strong hidden>Chapter Number</strong>
+            </label>
+            <input type="text" id="PodcastId" value="@ViewBag.podcastId" hidden name="PodcastId">
+            <input type="number" id="chapterDescription" value="@ViewBag.sectionmasterId" name="id" hidden>
+
+            <label for="psw">
+                <strong>Audio File</strong>
+            </label>
+
+            <input type="file" id="AudioFile" placeholder="Chapter Description" name="chapterFile" required>
+            <button type="submit" class=" btn btn-primary btnAdd mt-2">Add</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+        </form>
+    </div>
+</div>
+<div class="EditPopup">
+    <div class="formPopup" id="EditpopupForm">
+        <form asp-action="UpdateChapter" class="formContainer" id="FormData" enctype="multipart/form-data">
+            <input type="text" id="chapterid2" placeholder="Chapter Title" name="ChapterId" hidden required>
+            <input type="text" id="filename2" placeholder="Chapter Title" name="fileName" hidden required>
+            <input type="text" id="Audiobyte" placeholder="Chapter Title" name="Audiobyte" hidden required>
+
+
+            <label for="email">
+                <strong> Chapter Title</strong>
+            </label>
+            <input type="text" id="chapterTitle2" placeholder="Chapter Title" minlenght="10" maxlength="100" name="ChapterTitle" required>
+            <label for="psw">
+                <strong>Chapter Description</strong>
+            </label>
+            <input type="text" id="chapterDescription2" placeholder="Chapter Description" name="ChapterDescription" minlength="20" maxlength="200" required>
+            <label for="psw">
+                <strong>Chapter Number</strong>
+            </label>
+            <input type="number" id="chapterNumber2" placeholder="Chapter Number" name="ChapterNumber" required>
+            <span id="chapterNmberError" class="text-danger d-flex"></span>
+            <label for="psw">
+                <strong hidden>Chapter Number</strong>
+            </label>
+            <input type="text" id="PodcastId" value="@ViewBag.podcastId" hidden name="PodcastId" required>
+            <input type="number" id="chapterDescription" value="@ViewBag.sectionmasterId" name="id" hidden>
+
+            <label for="psw">
+                <strong>Audio File</strong>
+            </label>
+
+            <input type="file" id="AudioFile" placeholder=" file" name="chapterFile" />
+            <span id="audioerror" class="text-danger"></span>
+            <button type="submit" class=" btn btn-primary btnAdd mt-2">Add</button>
+            <button type="button" class="btn cancel" onclick="closeForm2()">Close</button>
+        </form>
+    </div>
+</div>
+
+@*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="//cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="~/lib/limonte-sweetalert2/sweetalert2.min.css">
+<script src="~/lib/limonte-sweetalert2/sweetalert2.all.min.js"></script>
+<script src="~/lib/limonte-sweetalert2/sweetalert2.all.js"></script>
+<script src="~/lib/limonte-sweetalert2/sweetalert2.min.js"></script>
+<script type="text/javascript">
+    function openForm() {
+        document.getElementById("popupForm").style.display = "block";
+        var element = document.getElementById("tblCustomers");
+        element.classList.add("blur-filter");
+        var element = document.getElementById("tblCustomers2");
+        element.classList.remove("blur-filter");
+    }
+    function openForm2(chapterId) {
+        document.getElementById("EditpopupForm").style.display = "block";
+        var element = document.getElementById("tblCustomers");
+        element.classList.add("blur-filter");
+        var element = document.getElementById("tblCustomers2");
+        element.classList.add("blur-filter");
+
+        $.ajax({
+            type: "GET",
+            url: "/Admin/GetChapterById",
+            dataType: "JSON",
+            data: { id: chapterId },
+            success: function(result) {
+
+                console.log(result);
+
+                $('#chapterid2').val(result.chapterId);
+                $('#chapterTitle2').val(result.chapterTitle);
+                $('#chapterDescription2').val(result.chapterDescription);
+                $('#chapterNumber2').val(result.chapterNumber);
+                $('#filename2').val(result.fileName);
+                $('#Audiobyte').val(result.audio)
+            },
+            error: function(result) {
+                console.log("error");
+            }
+
+
+        });
+
+
+    }
+    function closeForm() {
+        document.getElementById("popupForm").style.display = "none";
+        var element = document.getElementById("tblCustomers");
+        element.classList.remove("blur-filter");
+        var element = document.getElementById("tblCustomers2");
+        element.classList.remove("blur-filter");
+    }
+    function closeForm2() {
+        document.getElementById("EditpopupForm").style.display = "none";
+        var element = document.getElementById("tblCustomers");
+        element.classList.remove("blur-filter");
+        var element = document.getElementById("tblCustomers2");
+        element.classList.remove("blur-filter");
+    }
+    //window.onclick = function(event) {
+    //    let modal = document.getElementById('loginPopup');
+    //    if (event.target == modal) {
+    //        closeForm();
+    //    }
+    //}
+    $('#AudioFile').change(function() {
+        checkFileType("mp3");
+    });
+    function checkFileType(...extensions) {
+        var filType = document.getElementById("AudioFile").value;
+        var ext = filType.substring(filType.lastIndexOf(".") + 1, filType.length);
+
+        if (filType != "" || filType != Undefined) {
+            if ($.inArray(ext, extensions) == -1) {
+                $("#AudioFile").val("");
+                $("#audioerror").html("Only " + extensions.join(", ") + " Files are allowed.");
+            }
+            else {
+                $("#audioerror").html("");
+            }
+        }
+        else {
+            $("#audioerror").html("");
+        }
+    }
+    $('#chapterNumber').change(function() {
+        let chapterNumber = $('#chapterNumber').val();
+        $.ajax({
+            type: "GET",
+            url: "/Admin/ChapterNumberExist",
+            dataType: "JSON",
+            data: { chapterNumber,podcastId:@ViewBag.podcastId },
+            success: function(result) {
+                if (result == true) {
+                    //$("#chapterNumber").val("");
+                    $("#chapterNmberError").html(" ");
+                }
+
+                else if (result == false) {
+                    $("#chapterNumber").val("");
+                    $("#chapterNmberError").html(" Chapter number already Exist");
+
+                }
+                else {
+                    $("#chapterNumber").val("");
+                    $("#chapterNmberError").html("Enter Valid Chapter Number");
+                }
+            },
+            error: function(result) {
+                $("#chapterNmberError").html("Enter Valid Chapter Number");
+            }
+        });
+    });
+    $('#chapterNumber2').change(function() {
+        let chapterNumber = $('#chapterNumber2').val();
+        $.ajax({
+            type: "GET",
+            url: "/Admin/ChapterNumberExist",
+            dataType: "JSON",
+            data: { number: chapterNumber,podcastId:@ViewBag.podcastId},
+            success: function(result) {
+                if (result == true) {
+                    //$("#chapterNumber").val("");
+                    $("#chapterNmberError2").html(" ");
+                }
+
+                else if (result == false) {
+                    $("#chapterNumber2").val("");
+                    $("#chapterNmberError2").html(" Chapter number already Exist");
+
+                }
+                else {
+                    $("#chapterNumber2").val("");
+                    $("#chapterNmberError2").html("Enter Valid Chapter Number");
+                }
+            },
+            error: function(result) {
+                $("#chapterNmberError2").html("Enter Valid Chapter Number");
+            }
+        });
+    });
+    function DeleteAlert(id) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "GET",
+                    url: "/Admin/DeleteChapter",
+                    dataType: "JSON",
+                    data: { id: id },
+                    success: function(result) {
+                        location.reload();
+                        console.log(result);
+                    },
+                    error: function(result) {
+                        console.log(result);
+                    }
+                });
+            }
+        })
+    }
+    $("[data-getAllTable]").DataTable({
+         "lengthMenu": [[5,10, 25, 50, -1], [5,10, 25, 50, "All"]],
+         language: {
+            paginate: {
+                next: '<i class="bi bi-caret-right-fill" style="font-size:25px;"></i>',
+                 previous: '<i class="bi bi-caret-left-fill" style="font-size:25px;"></i>'
+            }
+        },
+        columnDefs: [
+            { orderable: false, targets: "no-sort" },
+            { visible: false, targets: "hide" },
+        ],
+
+    });
+</script>
+

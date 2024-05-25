@@ -1,0 +1,137 @@
+﻿@model TechNewsUI.Models.GetLiveInterviewByIdDto
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "GetLiveInteviewById";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/css/GetLiveInterviewById.css" asp-append-version="true" />
+<div  id="Detailedpage">
+    <div class="main vw-100 vh-80 position-relative">
+        <div class="image h-100 w-100 position-relative">
+            <img src="@("data:image/png;base64," + Convert.ToBase64String((byte[])Model.Image, 0))" class="w-100 mainImg" />
+        </div>
+        <div class="mainContent position-absolute">
+            <div class="row w-100 info text-muted h6 mb-4">
+                <div class="col">
+                    <script>
+                        document.write(timeSince(new Date("@Model.CreatedDate")) + " ago");
+                    </script>
+                </div>
+                <div class="col w-100 text-end ">
+                    <span>@Model.TotalViews <i class="bi bi-eye"></i></span>
+                </div>
+            </div>
+            <h1 class="typed-out">@Model.Title</h1>
+            <p class="mt-2">@Model.ShortDescription</p>
+        </div>
+    </div>
+    <article class="">
+        <p>
+            @Model.LongDescription.ToString();
+        </p>
+        <iframe class="video" width="560" height="315" src="@Model.YoutubeVideoLink" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </article>
+    <div class="comments">
+        <h3 class="my-4 text-muted">Comments</h3>
+         <button class="btn btn-outline-secondary" onclick="openForm()" style="margin-left: 89%;margin-top: -60px;"> <i class="bi bi-share mx-2"></i>Share</button>
+        @foreach (var comment in @Model.Comments)
+        {
+            <div class="singleComment">
+                <span>@comment.Email</span>
+                <p class="my-1">@comment.CommentDescription</p>
+            </div>
+            <hr />
+        }
+        <form asp-action="AddComment" asp-route-id=@Model.SectionMasterId>
+            <div class="container md-form p-4">
+                <i class="bi bi-pencil-fill" prefix"></i>
+                <div class="d-flex justify-content-between align-items-center">
+                    @if (Context.Session.GetString("Token") != null)
+                    {
+                        <textarea id="CommmentDescription" name="commentDescription" class="md-textarea form-control" rows="4" required></textarea>
+                    }
+                    else
+                    {
+                        <textarea id="CommmentDescription" name="commentDescription" class="md-textarea form-control" rows="4" required disabled placeholder="Please login first to add comment"></textarea>
+                    }
+
+                    <span class="text-danger"></span>
+
+                </div>
+                @if (Context.Session.GetString("Token") != null)
+                {
+                    <input type="submit" value="Comment" class="btn btn-dark commentBtn mt-3" />
+
+                }
+                else
+                {
+                    <input type="submit" value="Comment" class="btn btn-dark commentBtn mt-3" disabled />
+                }
+
+            </div>
+        </form>
+    </div>
+</div>
+@{
+    var Request = Context.Request;
+    var location = new Uri($"{Request.Scheme}://{Request.Host}{Request.Path}{Request.QueryString}");
+
+    var url = location.AbsoluteUri;
+
+}
+<div class="Sharediv">
+    <div class="sharepop" id="popform">
+        <div class="btnClose">
+            <button class="btnClose" onclick="closeForm()"><i class="bi bi-x-lg"></i></button>
+        </div>
+        <div class="heading mb-5 text-center">Share a Post</div>
+        <hr />
+        <div class="socilaMediaicon d-flex justify-content-around  ">
+            <a href="http://twitter.com/share?url=@url" class="btn btn-outline-primary btn-floating m-1 rounded-circle " title="share on twitter"><i class="bi bi-twitter"></i></a>
+            <a href="whatsapp://send?url=@url" data-action="share/whatsapp/share" class="btn btn-outline-success btn-floating m-1 rounded-circle" title="share on whatsapp" target="_blank"> <i class="bi bi-whatsapp"></i></a>
+            <a href="http://www.facebook.com/sharer.php?url=@url" class="btn btn-outline-info btn-floating m-1 rounded-circle" title="share on facebook"><i class="bi bi-facebook"></i></a>
+        </div>
+        <div class="copyLink text-center">
+            <input value="@url" id="Url" class="w-100 my-3" /><br />
+
+            <button class="btn btn-lg btn-dark rounded-pill" onclick="CopyText()">Copy</button>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    function closeForm() {
+        document.getElementById("popform").style.display = "none";
+        var element = document.getElementById("Detailedpage");
+        element.classList.remove("blur-filter");
+        var element = document.getElementById("Footerfixed");
+        element.classList.remove("blur-filter");
+
+    }
+    function openForm() {
+        document.getElementById("popform").style.display = "block";
+        var element = document.getElementById("Detailedpage");
+        element.classList.add("blur-filter");
+        var element = document.getElementById("Footerfixed");
+        element.classList.add("blur-filter");
+
+    }
+    function CopyText() {
+        // Get the text field
+        var copyText = document.getElementById("Url");
+
+        // Select the text field
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText.value);
+
+        // Alert the copied text
+    }
+</script>
+
+
+
+

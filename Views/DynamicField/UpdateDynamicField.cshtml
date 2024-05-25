@@ -1,0 +1,143 @@
+﻿@model TechNewsUI.Models.DynamicField
+
+@{
+    ViewData["Title"] = "UpdateDynamicField";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+<link rel="stylesheet" href="~/css/create.css" />
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.korzh.com/metroui/v4.5.1/css/metro-all.min.css">
+<style>
+    .center1{
+        margin:0 auto;
+    }
+
+    h4 {
+        text-align: center;
+    }
+</style>
+<h4>UpdateDynamicField</h4>
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4 center1">
+        <form asp-action="UpdateDynamicField">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" hidden>
+            <label asp-for="DynamicFieldId" class="control-label"></label>
+            <input asp-for="DynamicFieldId" class="form-control" />
+            <span asp-validation-for="DynamicFieldId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryType" class="control-label"></label>
+                <input asp-for="CategoryType" class="form-control" readonly />
+                <span asp-validation-for="CategoryType" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="FieldType">
+                <label asp-for="FieldType" class="control-label"></label>
+                <input asp-for="FieldType" class="form-control" readonly />
+                <span asp-validation-for="FieldType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LabelText" class="control-label"></label>
+                <input asp-for="LabelText" class="form-control" />
+                <span asp-validation-for="LabelText" class="text-danger"></span>
+            </div>
+            <div class="form-group change" id="Options">
+                <label asp-for="Options" class="control-label"></label>
+                <input type="text" asp-for="Options" class="form-control" data-role="taginput" data-tag-trigger="Comma" />
+                <span asp-validation-for="Options" class="text-danger"></span>
+            </div>
+            <div class="form-group change" id="PlaceHolder">
+                <label asp-for="PlaceHolder" class="control-label"></label>
+                <input asp-for="PlaceHolder" class="form-control" />
+                <span asp-validation-for="PlaceHolder" class="text-danger"></span>
+            </div>
+            <div class="form-group change" id="MaxLength">
+                <label asp-for="MaxLength" class="control-label"></label>
+                <input asp-for="MaxLength" class="form-control" />
+                <span asp-validation-for="MaxLength" class="text-danger"></span>
+            </div>
+            <div class="form-group change" id="MinLength">
+                <label asp-for="MinLength" class="control-label"></label>
+                <input asp-for="MinLength" class="form-control" />
+                <span asp-validation-for="MinLength" class="text-danger"></span>
+            </div>
+         
+            <div class="form-group" hidden id="IsNumber">
+                <label asp-for="IsNumber" class="control-label"></label>
+                <input asp-for="IsNumber" class="form-control" />
+                <span asp-validation-for="IsNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="FieldCode">
+                <label asp-for="FieldCode" class="control-label"></label>
+                <input asp-for="FieldCode" class="form-control" />
+                <span asp-validation-for="FieldCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Update" class="btn btn-primary w-100" />
+            </div>
+           
+        </form>
+       
+    </div>
+</div>
+
+
+
+
+<script src="https://cdn.korzh.com/metroui/v4.5.1/js/metro.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+    function showCorrectFields(value) {
+        console.log({ fieldTypeValue: value })
+
+        $(".change").attr("hidden", true);
+
+        if (value == "Text-Area") {
+            console.log("inside if")
+            $("#PlaceHolder").removeAttr("hidden");
+            $("#MaxLength").removeAttr("hidden");
+            $("#MinLength").removeAttr("hidden");
+            $("#FieldCode").removeAttr("hidden");
+        }
+        else if (value == "TextBox") {
+
+            $("#PlaceHolder").removeAttr("hidden");
+            $("#MaxLength").removeAttr("hidden");
+            $("#MinLength").removeAttr("hidden");
+            $("#FieldCode").removeAttr("hidden");
+        }
+        else if (value == "RadioButton") {
+            console.log("inside if")
+            $("#Options").removeAttr("hidden");
+            $("#FieldCode").removeAttr("hidden");
+
+        }
+        else if (value == "DropDown") {
+
+            $("#Options").removeAttr("hidden");
+            $("#FieldCode").removeAttr("hidden");
+
+        }
+        else if (value == "CheckBox") {
+
+            $("#Options").removeAttr("hidden");
+            $("#FieldCode").removeAttr("hidden");
+        }
+        else if (value == "Files") {
+
+            $("#PlaceHolder").removeAttr("hidden");
+            $("#FieldCode").removeAttr("hidden");
+        }
+
+    }
+
+    showCorrectFields('@Model.FieldType')
+
+</script>

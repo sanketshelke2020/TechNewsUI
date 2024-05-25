@@ -1,0 +1,239 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model IEnumerable<TechNewsUI.Models.Article>
+<link rel="stylesheet" href="~/css/GetAllPodcast.css" asp-append-version="true" />
+<style>
+        a {
+            text-decoration: none;
+        }
+
+        .HideArticle {
+            display: none;
+        }
+         select {
+        width: 100%;
+        padding: 15px;
+        margin: -1px 0 10px 0;
+        border:none;
+        background-color: white;
+    }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+
+<div class="row">
+    <div class="col-6">
+        <select id="ArticleCategoryId" class=" mb-3">Select Option</select>
+    </div>
+    <div class="col-6">
+        <select id="ArticleSubCategoryId" class=" mb-3"> <option value="">Article SubCategories</option></select>
+    </div>
+    <div class="col-12">
+        <span>OR</span>
+    </div>
+    <div class="col-4">
+        <select id="CountryId"> <option value="">Select Country</option></select>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="row m-5 card-list" id="ArticleList">
+    @foreach (var article in Model)
+    {
+        string tags = $"{article.ArticleCategoryId},{article.ArticleSubCategoryId},{article.CountryId}";
+        <div class="col-lg-4 p-5 col-md-6" data-tags="@tags">
+            @*            <a asp-action="ArticleDetail" asp-controller="Article" asp-route-SectionMasterId="@article.SectionMasterId">
+        *@                <div class="card" style="height:350px; width:269px">
+                <img class=" card-img-top" src="@("data:image/png;base64," + Convert.ToBase64String((byte[])article.Image, 0))" height="auto" />
+                <div class="card-body">
+                    <h4 class="card-title text-dark mb-2 ">@article.Title</h4>
+                    <div class="card-text text-dark shortdis">
+
+                        <p class="fw-bolder">Description:</p>
+                        <p>@article.ShortDescription</p>
+                        <form method="post" action="PostArticleDetail">
+                                <input type="number" hidden name="sectionMasterId" id="SectionMasterId" value="@article.SectionMasterId" />
+                                <button class=" btn btn-dark" type="submit" value="hidden">Details</button>
+                            </form>
+                        </div>                    
+                        <p class="card-text text-dark">
+                            <script>
+                                document.write(timeSince(new Date("@article.Published.ToString()")) + " ago");
+                            </script>
+                            <span class="text-muted views">@article.TotalViews <i class="bi bi-eye-fill"></i> &nbsp;</span>
+                        </p>
+                    </div>
+                </div>
+@*            </a>
+*@        </div>
+    }
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+<script>
+
+    console.log("script is working");
+    $(document).ready(function () {
+
+        var ddlArticleCategory = $('#ArticleCategoryId');
+        $.ajax({
+            url: '/Article/GetAllArticleCategories',
+            headers: { 'Access-Control-Allow-Origin': '*' },
+            type: 'POST',
+            dataType: 'json',
+
+            success: function (d) {
+                ddlArticleCategory.empty();
+                ddlArticleCategory.append($("<option></option>").val("").html("Select Article Category"));
+
+                $.each(d, function (i, articleCategory) {
+                    ddlArticleCategory.append($("<option></option>").val(articleCategory.articleCategoryId).html(articleCategory.articleCategoryName));
+                });
+
+
+            },
+            error: function (e) {
+                console.log("Error")
+                console.log(e);
+            }
+        });
+        $("#ArticleCategoryId").change(function () {
+            var articleCategoryId = parseInt($(this).val());
+
+            if (!isNaN(articleCategoryId)) {
+                var ddlArticleSubCategory = $('#ArticleSubCategoryId');
+                ddlArticleSubCategory.empty();
+                $.ajax({
+                    url: '/Article/GetAllArticleSubCategories',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { articleCategoryId: articleCategoryId },
+                    success: function (d) {
+                        ddlArticleSubCategory.empty();
+                        ddlArticleSubCategory.append($("<option></option>").val("").html("--Article SubCategories--"));
+                        $.each(d, function (i, articleSubCategories) {
+                            ddlArticleSubCategory.append(
+                                $("<option></option>")
+                                    .val(articleSubCategories.articleSubCategoryId)
+                                    .html(articleSubCategories.articleSubCategoryName)
+                            );
+                        });
+                        var articleList = $("#ArticleList").children().toArray();
+                        articleList.forEach((a) => {
+                            var tagList = a.dataset.tags.split(",")
+                            if (tagList[0] == articleCategoryId) {
+                                a.classList.remove("HideArticle")
+                            }
+                            else {
+                                a.classList.add("HideArticle")
+                            }
+                        });
+                    },
+                    error: function () {
+                        alert('Error!');
+                        console.log(f);
+                    }
+                });
+            }
+        });
+
+        $("#ArticleSubCategoryId").change(function () {
+            var articleCategoryId = parseInt($(this).val());
+
+            if (!isNaN(articleCategoryId)) {
+                var ddlArticleSubCategory = $('#ArticleSubCategoryId');
+                //ddlArticleSubCategory.empty();
+                var articleList = $("#ArticleList").children().toArray();
+                articleList.forEach((a) => {
+                    var tagList = a.dataset.tags.split(",")
+                    if (tagList[1] == articleCategoryId) {
+                        a.classList.remove("HideArticle")
+                    }
+                    else {
+                        a.classList.add("HideArticle")
+                    }
+                });
+                //$.ajax({
+                //    url: '/Article/GetAllArticleFilter',
+                //    type: 'GET',
+                //    dataType: 'json',
+                //    data: { articleCategoryId: articleCategoryId },
+                //    success: function (d) {
+                //        ddlArticleSubCategory.empty();
+                //        ddlArticleSubCategory.append($("<option></option>").val("").html("--Article SubCategories--"));
+                //        $.each(d, function (i, articleSubCategories) {
+                //            ddlArticleSubCategory.append($("<option></option>").val(articleSubCategories.articleSubCategoryId).html(articleSubCategories.articleSubCategoryName));
+                //        });
+
+                //    },
+                //    error: function () {
+                //        alert('Error!');
+                //    }
+                //});
+            }
+
+
+        });
+
+        var ddlCountry = $('#CountryId');
+        $.ajax({
+            url: '/Register/GetAllCountries',
+            headers: { 'Access-Control-Allow-Origin': '*' },
+            type: 'POST',
+            dataType: 'json',
+            //data: { countryId: countryId },
+            success: function (d) {
+                ddlCountry.empty();
+                ddlCountry.append($("<option></option>").val("").html("Choose Country"));
+
+                $.each(d, function (i, country) {
+                    ddlCountry.append($("<option></option>").val(country.countryId).html(country.countryName));
+                });
+            },
+            error: function (e) {
+                console.log("Error")
+                console.log(e);
+            }
+        });
+
+        $("#CountryId").change(function () {
+            var countryId = parseInt($(this).val());
+
+            if (!isNaN(countryId)) {
+                var ddlCountry = $('#CountryId');
+                //ddlArticleSubCategory.empty();
+                var articleList = $("#ArticleList").children().toArray();
+                articleList.forEach((a) => {
+                    var tagList = a.dataset.tags.split(",")
+                    if (tagList[2] == countryId) {
+                        a.classList.remove("HideArticle")
+                    }
+                    else {
+                        a.classList.add("HideArticle")
+                    }
+                });
+
+            }
+
+
+        });
+
+
+
+
+
+
+
+    });
+</script>

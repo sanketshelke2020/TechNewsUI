@@ -1,0 +1,146 @@
+﻿@model IEnumerable<TechNewsUI.Models.BreakingNews>
+
+
+<link rel="stylesheet" href="~/css/HomePage.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/GetAllPodcast.css" asp-append-version="true" />
+
+
+
+
+<!----------------------------------Breaking News------------------------------->
+
+
+<div id="carouselExampleIndicators" class="carousel slide carousel-fade my-5" data-bs-ride="true">
+    <div class="carousel-indicators">
+        @{
+            int k = 0;
+        }
+        @for (int i = 0; i <= Model.Count() - 1; i++)
+        {
+            k++;
+            var active = k == 1 ? "active" : "";
+            <b utton type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="@i" class="@active" aria-current="true" aria-label="Slide @i"></b>
+        }
+    </div>
+
+
+    <div class="carousel-inner">
+        @{
+            int j = 0;
+        }
+        @foreach (var item in Model)
+        {
+            j++;
+            var active = j == 1 ? "active" : "";
+            <div class="carousel-item @active rounded-pill">
+                <div class="containergradient">
+                    <img src="@("data:image/png;base64," + Convert.ToBase64String((byte[])item.Image, 0))" class="d-block w-100 h-200 mainImg" />
+                </div>
+                <div class="carousel-caption d-none d-md-block">
+
+                    <h5>@item.Title</h5>
+
+@*                    <a class="btn btn-primary" asp-action="ArticleDetail" asp-controller="Article" asp-route-SectionMasterId="@item.SectionMasterId"> Details</a>
+                *@                 <form method="post" action="/Article/PostArticleDetail">
+                        <input type="number" hidden name="sectionMasterId" id="SectionMasterId" value="@item.SectionMasterId" />
+                        <button class=" btn btn-primary" type="submit" value="hidden">Details</button>
+                    </form>
+            </div>
+            </div>
+        }
+
+    </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon text-black" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <span class="carousel-control-next-icon text-black" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+
+
+</div>
+<!------------------------------Trending Videos--------------------------------->
+<h1 class="text-center mt-5">Trending Videos</h1>
+<div class="row m-3 card-list">
+    @foreach (var item in ViewBag.treands)
+    {
+        <div class="col-lg-4 p-5 col-md-6">
+                <div class="card">
+                    <img class="card-img-top" src="@("data:image/png;base64," + Convert.ToBase64String((byte[])item.Image, 0))" />
+                    <div class="card-body">
+                        <h5 class="card-title text-dark mb-2">@item.Title</h5>
+                        <div class="card-text text-dark shortdis">
+
+                        <p class="fw-bolder">Description:</p>
+                        <p>@item.ShortDescription</p>
+                    <form method="post" action="/Youtube/PostYoutubeDetail">
+                            <input type="number" hidden name="sectionMasterId" id="SectionMasterId" value="@item.SectionMasterId" />
+                            <button class="stretched-link bg-transparent border-0 text-primary text-decoration-underline" type="submit" value="hidden">Details</button>
+                        </form>
+                    </div>
+                        <p class="card-text text-dark mt-2">
+                            @*<small class="text-muted">Published On:</small>*@
+                            <span class="text-muted views text-dark">@item.TotalViews <i class="bi bi-eye-fill"></i> &nbsp;</span>
+                        </p>
+                    </div>
+                </div>
+        </div>
+    }
+</div>
+
+<link rel="stylesheet" href="~/lib/limonte-sweetalert2/sweetalert2.min.css">
+<script src="~/lib/limonte-sweetalert2/sweetalert2.all.min.js"></script>
+<script src="~/lib/limonte-sweetalert2/sweetalert2.all.js"></script>
+<script src="~/lib/limonte-sweetalert2/sweetalert2.min.js"></script>
+@if (TempData["LoginGuest"] != null)
+{
+
+
+    <script>
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+
+        Toast.fire({
+            icon: 'success',
+            title: '@TempData["LoginGuest"]'
+        })
+    </script>
+}
+@if (TempData["LoginUser"] != null)
+{
+
+
+    <script>
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        })
+
+        Toast.fire({
+            icon: 'success',
+            title: '@TempData["LoginUser"]'
+        })
+    </script>
+}
+

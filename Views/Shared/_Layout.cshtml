@@ -1,0 +1,539 @@
+﻿@using TechNewsUI.Models
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TechNewsUI</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/TechNewsUI.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" integrity="sha384-xeJqLiuOvjUBq3iGOjvSQSIlwrpqjSHXpduPd6rQpuiM3f5/ijby8pCsnbu5S81n" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;500&family=Raleway:wght@500;700&display=swap" rel="stylesheet">
+    <script>
+        function timeSince(date) {
+            let newDate = new Date()
+            newDate.setHours(newDate.getHours() - 5);
+            newDate.setMinutes(newDate.getMinutes() - 30);
+            var seconds = Math.floor((newDate - date) / 1000);
+
+            var interval = seconds / 31536000;
+
+            if (interval > 1) {
+                return Math.floor(interval) + " years";
+            }
+            interval = seconds / 2592000;
+            if (interval > 1) {
+                return Math.floor(interval) + " months";
+            }
+            interval = seconds / 86400;
+            if (interval > 1) {
+                return Math.floor(interval) + " days";
+            }
+            interval = seconds / 3600;
+            if (interval > 1) {
+                return Math.floor(interval) + " hours";
+            }
+            interval = seconds / 60;
+            if (interval > 1) {
+                return Math.floor(interval) + " minutes";
+            }
+            return Math.floor(seconds) + " seconds";
+
+        }
+    </script>
+</head>
+<body class="body preload" id="DetailedpageBody">
+
+    <header>
+        <nav class="navbar navbar-expand-xl navbar-toggleable-sm navbar-light bg-white mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="HomePage" asp-action="GetBreakingNews" style="margin-left:10px;"><img src="~/Image/Tech1.png" height="43px" /></a>
+                @if (Context.Session.GetString("Token") != null)
+                {
+                    <ul class="navbar-nav showicon">
+                        <li>
+                            <a class="btn btn-light bg-light rounded-circle  mx-2 dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="bi bi-person"></i>
+                            </a>
+                            <ul class="  dropdown-menu">
+                                <li> <a class="dropdown-item text-dark" asp-action="MyProfile" asp-route-id="@Context.Session.GetString("UserId")" asp-controller="HomePage"> Your Profile </a></li>
+                                <li> <a class="dropdown-item  text-dark">ResetPassword </a></li>
+                                <li> <a class="dropdown-item text-dark" asp-action="Logut" asp-controller="Login">  <i class="bi bi-box-arrow-left mx-1"></i>Log Out </a></li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <button type="button" class="btn btn-light bg-light rounded-circle mx-2 " data-toggle="modal" data-target="#exampleModalCenter">
+                                <i class="bi bi-bell"></i>
+                            </button>
+                        </li>
+
+                        <li>
+                            <a href="#search" class="btn btn-light bg-light rounded-circle mx-2">
+                                <i class="bi bi-search"></i>
+                            </a>
+                        </li>
+
+                    </ul>
+                }
+                else
+                {
+                    <ul class="navbar-nav showicon">
+                        <li>
+                            <a class="btn btn-light bg-light rounded-circle  mx-2 dropdown-toggle" data-bs-toggle="dropdown">
+                                <i class="bi bi-person"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+
+                                <li> <a class="dropdown-item text-dark" asp-action="Login" asp-controller="Login">  Log In </a></li>
+                            </ul>
+                        </li>
+
+
+                        <li>
+                            <a href="#search" class="btn btn-light bg-light rounded-circle mx-2">
+                                <i class="bi bi-search"></i>
+                            </a>
+                        </li>
+
+                    </ul>
+                }
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse ml-3" id="navbarSupportedContent">
+                    <ul class="navbar-nav  topnav-right mx-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Article" asp-action="GetAllArticle">Article</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class=" nav-link  text-dark" asp-area="" asp-controller="Event" asp-action="GetAllEvents">Event</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Podcast" asp-action="GetAllPodcast">Podcast</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Webinar" asp-action="GetAllWebinar">Webinar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="CaseStudies" asp-action="GetAllCaseStudies">CaseStudies</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Magazine" asp-action="GetAllMagzine">Magazine</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="LiveInterview" asp-action="GetAllLiveInterview">Interview</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Youtube" asp-action="GetAllYoutube">Videos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="HomePage" asp-action="SubscribtionPlan">Subscribe</a>
+                        </li>
+
+
+                    </ul>
+                    @if (Context.Session.GetString("Token") != null)
+                    {
+                        <ul class="navbar-nav iconul" style="margin-left:20px">
+                            <li>
+                                <button id="NotificationBtn" class="btn btn-light bg-light  rounded-circle navbar-colla mx-2" data-toggle="modal" data-target="#exampleModalCenter">
+                                    <i class="bi bi-bell "></i>
+                                    <span class="badge" hidden><i class="bi bi-dot"></i></span>
+                                </button>
+
+
+
+                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Notifications</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="container-fluid notification-container">
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <a href="#search" class="btn btn-light bg-light rounded-circle mx-2">
+                                    <i class="bi bi-search"></i>
+
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn btn-light bg-light rounded-circle hideicon mx-2 dropdown-toggle" data-bs-toggle="dropdown">
+                                    <i class="bi bi-person"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end ">
+                                    <li> <a class="dropdown-item text-dark" asp-action="MyProfile" asp-route-id="@Context.Session.GetString("UserId")" asp-controller="HomePage">Your Profile </a></li>
+                                    <li> <a asp-controller="Forget" asp-action="ChangePassword" class="dropdown-item text-dark">ResetPassword </a></li>
+                                    <li> <a class="dropdown-item text-dark" asp-action="Logut" asp-controller="Login"> <i class="bi bi-box-arrow-left mx-1"></i>Log Out </a></li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                    }
+                    else
+                    {
+                        <ul class="navbar-nav iconul" style="margin-left:20px">
+
+                            <li>
+                                <a href="#search" class="btn btn-light bg-light rounded-circle mx-2">
+                                    <i class="bi bi-search"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="btn btn-light bg-light rounded-circle hideicon mx-2 dropdown-toggle" data-bs-toggle="dropdown">
+                                    <i class="bi bi-person"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end ">
+
+                                    <li> <a class="dropdown-item  text-dark" asp-action="Login" asp-controller="Login">Log In </a></li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                    }
+                </div>
+            </div>
+            <div id="search">
+                <button type="button" class="close">×</button>
+                <form asp-action="GetSectionByKeyword" asp-controller="HomePage" method="get">
+                    <input type="search" value="" placeholder="type keyword here" name="searchKeyword" />
+                    <button type="submit" class="btn btn-primary  btn-lg searchbutton">Search</button>
+                </form>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+
+    <footer class="flex-footer text-center text-lg-start border border-white mt-xl-5 pt-3" id="Footerfixed">
+
+        <!-- Grid container -->
+        <div class="container">
+            <!--Grid row-->
+            <div class="row">
+                <!--Grid column-->
+                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+
+                    <ul class="list-unstyled mb-4">
+                        <li>
+                            <span class="text-white"><i class="bi bi-geo-alt-fill"></i></span><span class="text-white ms-2">204,C4,Arihant Anshula</span>
+                        </li>
+                        <li>
+                            <span class="text-white"><i class="bi bi-telephone-fill"></i></span><span class="text-white ms-2">+91 - 8828632078</span>
+                        </li>
+                        <li>
+                            <span class="text-white"><i class="bi bi-envelope-fill"></i></span><span class="text-white ms-2">madhusudan.vratesh@gmail.com</span>
+                        </li>
+
+                    </ul>
+
+                    <div class="mt-2">
+                        <!-- Facebook -->
+                        <a type="button" href="https://www.facebook.com/" target="_blank" class="btn btn-outline-light btn-floating m-1 rounded-circle "><i class="bi bi-facebook"></i></a>
+                        <!-- Twitter -->
+                        <a type="button" href="https://twitter.com/i/flow/login" target="_blank" class="btn btn-outline-light btn-floating m-1 rounded-circle"><i class="bi bi-twitter"></i></a>
+                        <!-- Google + -->
+                        <a type="button" href="https://www.google.com/" target="_blank" class="btn btn-outline-light btn-floating m-1 rounded-circle"><i class="bi bi-google"></i></a>
+                        <!-- Linkedin -->
+                    </div>
+                </div>
+                <!--Grid column-->
+                <!--Grid column-->
+                <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                    <ul class="list-unstyled">
+                        @if (Context.Session.GetString("Token") != null)
+                        {
+                            <li>
+                                <i class="bi bi-caret-right-fill" style="color: white;"></i>
+                                <a asp-action="AddUserQuery" asp-controller="StaticPage" class="text-white text-decoration-none">Contact us</a>
+                            </li>
+                        }
+
+
+                        <li>
+                            <i class="bi bi-caret-right-fill" style="color: white;"></i>
+                            <a asp-action="FAQ" asp-controller="StaticPage" class="text-white text-decoration-none">FAQ</a>
+                        </li>
+                        <li>
+                            <i class="bi bi-caret-right-fill" style="color: white;"></i>
+                            <a asp-action="AboutUs" asp-controller="StaticPage" class="text-white text-decoration-none">About Us</a>
+                        </li>
+                        <li>
+                            <i class="bi bi-caret-right-fill" style="color: white;"></i>
+                            <a asp-action="TermsAndCondition" asp-controller="StaticPage" class="text-white text-decoration-none">Terms and Conditions</a>
+                        </li>
+
+                        <li>
+                            <i class="bi bi-caret-right-fill" style="color: white;"></i>
+                            <a asp-action="PrivacyPolicy" asp-controller="StaticPage" class="text-white text-decoration-none">Privacy Policy</a>
+                        </li>
+                        <li>
+                            <i class="bi bi-caret-right-fill" style="color: white;"></i>
+                            <a asp-action="Career" asp-controller="StaticPage" class="text-white text-decoration-none">Career</a>
+                        </li>
+                    </ul>
+                </div>
+                <!--Grid column-->
+                <!--Grid column-->
+                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                    <h5 class="text-white"> NewsLetter </h5>
+                    <p class="text-white">To get Daily updates,put your EmailAddress here.</p>
+                    <div class="form-outline form-white mb-4">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input name="email" type="email" id="NewssletterMail" placeholder="Your Mail" style="border-radius: 20px;" class="form-control" required />
+                        <span id="msg" class="text-danger" style="Backgroud-color:white;"></span>
+                        <div class="form-group" style="margin-top: 10px;">
+                            <input type="submit" id="NewsletterForm" value="Send" class="btn btn-primary searchbutton rounded-pill" />
+                        </div>
+                        @*            <a class="btn btn-primary searchbutton rounded-pill"  type="submit" value="Create" style="margin-top: 10px;">Send</a>
+                        *@
+
+                    </div>
+                </div>
+                <!--Grid column-->
+            </div>
+            <!--Grid row-->
+        </div>
+        <!-- Grid container -->
+        <!-- Copyright -->
+        <div class="text-center border-top border-secondary">
+            © 2022 Copyright:
+            <a class="text-white text-decoration-none" href="https://mdbootstrap.com/">NewsApplication</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+
+
+
+    <!-- End of .container -->
+    @*<link rel="stylesheet" href="~/lib/limonte-sweetalert2/sweetalert2.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="~/lib/limonte-sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="~/lib/limonte-sweetalert2/sweetalert2.all.js"></script>
+    <script src="~/lib/limonte-sweetalert2/sweetalert2.min.js"></script>*@
+
+    <link rel="stylesheet" href="~/lib/limonte-sweetalert2/sweetalert2.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <script src="~/lib/limonte-sweetalert2/sweetalert2.all.min.js"></script>
+    <script src="~/lib/limonte-sweetalert2/sweetalert2.all.js"></script>
+    <script src="~/lib/limonte-sweetalert2/sweetalert2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+    <script type="text/javascript">
+        $('#myModal').on('shown.bs.modal', function () {
+            $('#myInput').trigger('focus')
+        })
+
+        //notification Count
+        $().ready(function(){
+            $.ajax({
+                url: '/HomePage/GetNotifications?i=count',
+                headers: { 'Access-Control-Allow-Origin': '*' },
+                type: 'get',
+                dataType: 'json',
+                success: function(count){
+                    console.log(count);
+                    if(count>=1){
+                        $(".badge").removeAttr('hidden');
+                    }
+                    else{
+                        $(".badge").attr("hidden", true);
+                    }
+                }
+            })
+        })
+
+        //notification api call
+        $('#NotificationBtn').on('click', function () {
+            $.ajax({
+                url: '/HomePage/GetNotifications?i=hello',
+                headers: { 'Access-Control-Allow-Origin': '*' },
+                type: 'get',
+                dataType: 'json',
+
+                success: function (d) {
+                    console.log(d);
+                    console.log(d[0].sectionMasterId);
+                    $('.notification-container').html("");
+                    d.forEach(function (item) {
+                                 let actionName = "";
+                    let controllerName = "";
+                    let category = item.categoryType;
+                        switch(category) {
+                            case "@nameof(CategoryEnum.Article)":
+                                actionName = "ArticleDetail";
+                                controllerName = "Article";
+                                break;
+                            case "@nameof(CategoryEnum.Youtube)":
+                                actionName = "YoutubeDetail";
+                                controllerName = "Youtube";
+                                break;
+                            case "@nameof(CategoryEnum.Podcast)":
+                                actionName = "GetPodcastById";
+                                controllerName = "Podcast";
+                                break;
+                            case "@nameof(CategoryEnum.CaseStudies)":
+                                actionName = "CaseStudiesDetail";
+                                controllerName = "CaseStudie";
+                                break;
+                            case "@nameof(CategoryEnum.LiveInterview)":
+                                actionName = "GetLiveInteviewById";
+                                controllerName = "LiveInterview";
+                                break;
+                            case "@nameof(CategoryEnum.Magazine)":
+                                actionName = "GetMagazineById";
+                                controllerName = "Magazine";
+                                break;
+                            case "@nameof(CategoryEnum.EventSchedule)":
+                                actionName = "GetEventById";
+                                controllerName = "Event";
+                                break;
+                            case "@nameof(CategoryEnum.Webinar)":
+                                actionName = "WebinarDetail";
+                                controllerName = "Webinar";
+                                break;
+                            default:
+                                break;
+                        }
+                        var url = "/" + controllerName + "/" + actionName + "?SectionMasterId=" + item.sectionMasterId;
+                        var date = timeSince(new Date(item.createdDate)) + " ago";
+                        $('.notification-container').append(`
+                                                                        <div class="row my-3 notification-row" onclick="location.href='${url}'">
+                                                                            <div class="col-3"><img class="notificationImg" src = "data:image/png;base64,${item.image}"></div>
+                                                                    <div class="col-9"><b>${item.title}</b> <p class="notification-shortDes mt-1"> ${item.shortDescription}</p>
+                                                                        <div class='notification-info d-flex justify-content-between'>
+                                                                            <h6></h6>
+                                                                                    <h6 class="dateConvert">${date}</h6>
+                                                                        </div>
+                                                                    </div>
+                                                        </div>
+                                                                           
+
+                                                    `)
+                    })
+                },
+                error: function (e) {
+                    console.log("Error")
+                    console.log(e);
+                }
+            });
+        })
+
+
+        $('#NewsletterForm').click(function (e) {
+            e.preventDefault();
+            var data1 = $("#NewssletterMail").val();
+            if (data1 == null) {
+                $("#msg").html("This Field is Required");
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: "/HomePage/AddNewsLetter",
+                    data: { email: $('#NewssletterMail').val(), access_token: $("#access_token").val() },
+                    success: function (result) {
+                        if (result == true) {
+                            $("#NewssletterMail").val("");
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top-end',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'congratulations! You Will get Daily updates from TechNews'
+                            })
+                        }
+                        else {
+                            $("#NewssletterMail").val("");
+                            $("#msg").html("Enter Valid Email");
+                        }
+
+                    },
+                    error: function (result) {
+                        $("#msg").html("Enter Valid Email");
+                    }
+
+
+                });
+            }
+        });
+        $(document).ready(function () {
+            $('input').change(function () {
+                $.ajax({
+                    type: "GET",
+                    url: "/HomePage/EmailsDoesNotExists",
+                    data: { email: $('#NewssletterMail').val(), access_token: $("#access_token").val() },
+                    success: function (result) {
+                        if (result == true) {
+                            $("#NewssletterMail").val("");
+                            $("#msg").html(" ");
+                        }
+
+                        else if (result == false) {
+                            $("#NewssletterMail").val("");
+                            $("#msg").html("Email Id Alreday Exist");
+
+                        }
+                        else {
+                            $("#NewssletterMail").val("");
+                            $("#msg").html("Enter Valid Email");
+                        }
+                    },
+                    error: function (result) {
+                        $("#msg").html("Enter Valid Email");
+                    }
+                });
+            });
+        });
+
+    </script>
+   @*  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>*@
+    
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>
+

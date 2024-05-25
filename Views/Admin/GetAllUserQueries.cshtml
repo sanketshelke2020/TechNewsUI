@@ -1,0 +1,96 @@
+﻿@model IEnumerable<TechNewsUI.Models.UserQuery>
+
+@{
+    ViewData["Title"] = "GetAllUserQueries";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<style>
+    input {
+        border-radius: 12px;
+        margin-bottom: 27px
+    }
+
+    .dataTables_wrapper {
+        width: 100%;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css" />
+
+<h1>User Queries</h1>
+
+<div class="d-flex justify-content-center align-items-center p-3 ">
+    <table data-getAllTable class="table table-striped mb-4 mx-3">
+        <thead>
+            <tr class="bg-light">
+
+                <th>
+                    @Html.DisplayNameFor(model => model.UserId)
+                </th>
+
+                <th>
+                    Category Type
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.EmailAddress)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Subject)
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserId)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CategoryType)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EmailAddress)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subject)
+                    </td>
+
+                    <td>
+                        <div class="d-flex">
+                            <a asp-action="GetUserQueryById" asp-route-id="@item.QuerieId" class="mx-2 h5"><i class="bi bi-eye-fill"></i></a>
+
+                        </div>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="//cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+    $("[data-getAllTable]").DataTable({
+        "lengthMenu": [[5,10, 25, 50, -1], [5,10, 25, 50, "All"]],
+        language: {
+            paginate: {
+                next: '<i class="bi bi-caret-right-fill" style="font-size:25px;"></i>',
+                previous: '<i class="bi bi-caret-left-fill" style="font-size:25px;"></i>'
+            }
+        },
+        
+        columnDefs: [
+            { orderable: false, targets: "no-sort" },
+            { visible: false, targets: "hide" },
+        ],
+
+    });
+</script>
